@@ -1,6 +1,8 @@
-package iX;
+package projectdemo;
 
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -10,34 +12,45 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-@SuppressWarnings("serial")
+
 public class MainFrame extends JFrame{
+	private JPanel buttonpanel, textareapanel;
+	private Container c;
+	private JTextArea ta;
+	private JScrollPane scroll;
+	private JLabel appName;
+	private Font f;
 
 	MainFrame() {
+		initcomponents();
+	}
+
+	public void initcomponents() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(800, 600);
+		this.setBounds(150,50,1060,640);
 		this.setTitle("iXPAD");
 		this.setLayout(null);
 		
-		Container frameContainer = this.getContentPane();
-		frameContainer.setLayout(null);
+		c = this.getContentPane();
+		c.setLayout(null);
+		f = new Font("Arial",Font.BOLD,18);
 				
 		// App name label
-		JLabel appName = new JLabel("iXPAD");
-		appName.setBounds(5, 0, 100, 50);
+		 appName = new JLabel("iXPAD");
+		appName.setBounds(5,0,100,50);
 		
-		frameContainer.add(appName);
+		c.add(appName);
 		
 		// Control button panel
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setBounds(0, 45, 250, 640);
-		
+		 buttonpanel = new JPanel();
+		buttonpanel.setBounds(0,45,250,640);
+		buttonpanel.setBackground(Color.LIGHT_GRAY);
 		// Control button panel layout
-		BoxLayout buttonPanelBoxLayout = new BoxLayout(buttonPanel, BoxLayout.Y_AXIS);
+		BoxLayout buttonPanelBoxLayout = new BoxLayout(buttonpanel, BoxLayout.Y_AXIS);
 		
-		buttonPanel.setLayout(buttonPanelBoxLayout);
+		buttonpanel.setLayout(buttonPanelBoxLayout);
 
-		frameContainer.add(buttonPanel);
+		c.add(buttonpanel);
 		
 		// All Control Buttons
 		JButton btnOpen = new JButton("Open");
@@ -52,34 +65,42 @@ public class MainFrame extends JFrame{
 		JButton btnSearch = new JButton("Search");
 		JButton btnBookmarkIt = new JButton("Bookmark It");
 		
-		buttonPanel.add(btnOpen);
-		buttonPanel.add(btnNewPage);
-		buttonPanel.add(btnSave);
-		buttonPanel.add(btnSaveAs);
-		buttonPanel.add(btnCopy);
-		buttonPanel.add(btnPaste);
-		buttonPanel.add(btnCut);
-		buttonPanel.add(btnUndo);
-		buttonPanel.add(btnRedo);
-		buttonPanel.add(btnSearch);
-		buttonPanel.add(btnBookmarkIt);
+		buttonpanel.add(btnOpen);
+		buttonpanel.add(btnNewPage);
+		buttonpanel.add(btnSave);
+		buttonpanel.add(btnSaveAs);
+		buttonpanel.add(btnCopy);
+		buttonpanel.add(btnPaste);
+		buttonpanel.add(btnCut);
+		buttonpanel.add(btnUndo);
+		buttonpanel.add(btnRedo);
+		buttonpanel.add(btnSearch);
+		buttonpanel.add(btnBookmarkIt);
 		
-		// Text editor
-		JTextArea textEditor = new JTextArea();
+		textareapanel = new JPanel();
+		textareapanel.setLayout(null);
+		textareapanel.setBounds(260,0,1060,640);
+		textareapanel.setBackground(Color.lightGray);
+	    c.add(textareapanel);
+	
+	ta = new JTextArea();
+	ta.setBackground(Color.LIGHT_GRAY);
+	ta.setLineWrap(true);
+	ta.setWrapStyleWord(true);     
+	ta.setFont(f ); 
+	
+	scroll = new JScrollPane(ta);
+	scroll.setBounds(0,0,1060,640);
+	textareapanel.add(scroll);  
 
-		// Scroll area for text editor panel
-		JScrollPane textEditorScroll = new JScrollPane(textEditor);
-		textEditorScroll.add(textEditor);
-		textEditorScroll.setBounds(0, 0, 800, 600);
 		
-		// Text editor panel
-		JPanel textEditorPanel = new JPanel();
-		textEditorPanel.setBounds(280, 45, 800, 600);
+	}
 		
-		frameContainer.add(textEditorPanel);
 		
-		textEditorPanel.add(textEditorScroll);		
-		textEditorPanel.add(textEditor);
-		
+	
+	
+	public static void main(String[] args) {
+		MainFrame m = new MainFrame();
+		m.setVisible(true);
 	}
 }
