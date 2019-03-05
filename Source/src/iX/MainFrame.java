@@ -6,6 +6,7 @@ import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -14,7 +15,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -22,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame implements ActionListener{
 	private Container frameContainer;
@@ -67,16 +72,37 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		// All Control Buttons
 		btnOpen = new JButton("Open");
+		addKeyShortcut(btnOpen, "Open", KeyStroke.getKeyStroke(KeyEvent.VK_O,ActionEvent.CTRL_MASK));
+		
 		btnNewPage = new JButton("New Page");
+		addKeyShortcut(btnNewPage, "New Page", KeyStroke.getKeyStroke(KeyEvent.VK_N,ActionEvent.CTRL_MASK));
+				
 		btnSave = new JButton("Save");
+		addKeyShortcut(btnSave, "Save", KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
+		
 		btnSaveAs = new JButton("Save As");
+		addKeyShortcut(btnSaveAs, "Save As", KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
+		
 		btnCopy = new JButton("Copy");
+		addKeyShortcut(btnCopy, "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C,ActionEvent.CTRL_MASK));
+		
 		btnPaste = new JButton("Paste");
+		addKeyShortcut(btnPaste, "Paste", KeyStroke.getKeyStroke(KeyEvent.VK_V,ActionEvent.CTRL_MASK));
+		
 		btnCut = new JButton("Cut");
+		addKeyShortcut(btnCut, "Cut", KeyStroke.getKeyStroke(KeyEvent.VK_X,ActionEvent.CTRL_MASK));
+		
 		btnUndo = new JButton("Undo");
+		addKeyShortcut(btnUndo, "Undo", KeyStroke.getKeyStroke(KeyEvent.VK_Z,ActionEvent.CTRL_MASK));
+		
 		btnRedo = new JButton("Redo");
+		addKeyShortcut(btnRedo, "Redo", KeyStroke.getKeyStroke(KeyEvent.VK_Y,ActionEvent.CTRL_MASK));
+		
 		btnSearch = new JButton("Search");
+		addKeyShortcut(btnSearch, "Search", KeyStroke.getKeyStroke(KeyEvent.VK_F,ActionEvent.CTRL_MASK));
+		
 		btnBookmarkIt = new JButton("Bookmark It");
+		addKeyShortcut(btnBookmarkIt, "Bookmark It", KeyStroke.getKeyStroke(KeyEvent.VK_B,ActionEvent.CTRL_MASK));
 		
 		buttonPanel.add(btnOpen);
 		buttonPanel.add(btnNewPage);
@@ -173,6 +199,19 @@ public class MainFrame extends JFrame implements ActionListener{
 		if (e.getSource() == btnPaste) {
 			textEditor.paste();
 		}
+	}
+	
+	private void addKeyShortcut(JButton button, String actionText, KeyStroke ks) {
+		InputMap inputMap = button.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW);
+		inputMap.put(ks, actionText);
+		button.getActionMap().put(actionText, new AbstractAction()
+	    {
+	        @Override
+	        public void actionPerformed( ActionEvent e )
+	        {
+	            ((AbstractButton) e.getSource()).doClick();
+	        }
+	    } );
 	}
 	
 	private boolean saveFileDialog() {
