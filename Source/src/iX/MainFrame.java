@@ -27,6 +27,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
 
 public class MainFrame extends JFrame implements ActionListener{
 	private Container frameContainer;
@@ -34,6 +37,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JPanel buttonPanel, textEditorPanel;
 	private JButton btnOpen, btnNewPage, btnSave, btnSaveAs, btnCopy, btnPaste, btnCut, btnUndo, btnRedo, btnSearch, btnBookmarkIt;
 	private JTextArea textEditor;
+	private UndoManager undoManager = new UndoManager();
 	private Font f;
 	
 	private String workFilePath;
@@ -125,6 +129,15 @@ public class MainFrame extends JFrame implements ActionListener{
 	    textEditor = new JTextArea();	    
 	    textEditor.setLineWrap(true);
 	    textEditor.setWrapStyleWord(true); 
+	    textEditor.getDocument().addUndoableEditListener(new UndoableEditListener(){
+
+            @Override
+            public void undoableEditHappened(UndoableEditEvent e) {
+            undoManager.addEdit(e.getEdit());
+            updateUndoRedo();
+            }    
+        });
+        
 	
 	    JScrollPane textEditorScroll = new JScrollPane(textEditor);
 		textEditorScroll.setBounds(0,0,1060,640);
@@ -142,6 +155,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		btnSearch.addActionListener(this);
 		btnBookmarkIt.addActionListener(this);
 		
+		undoManager.setLimit(1000);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -199,6 +213,14 @@ public class MainFrame extends JFrame implements ActionListener{
 		if (e.getSource() == btnPaste) {
 			textEditor.paste();
 		}
+		
+		if (e.getSource() == btnUndo) {
+			undoFile();
+		}
+		
+		if (e.getSource() == btnRedo) {
+			redoFile();
+		}
 	}
 	
 	private void addKeyShortcut(JButton button, String actionText, KeyStroke ks) {
@@ -244,4 +266,27 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		return true;
 	}
+	
+	public void undoFile(){
+        try{
+            undoManager.undo();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        updateUndoRedo();
+    }
+    
+    public void redoFile(){
+        try{
+            undoManager.redo();
+        }catch(Exception ex){
+        	ex.printStackTrace();
+        }
+        updateUndoRedo();
+    }
+	
+	public void updateUndoRedo(){
+        btnUndo.setEnabled(undoManager.canUndo());
+        btnRedo.setEnabled(undoManager.canRedo());
+    }
 }
