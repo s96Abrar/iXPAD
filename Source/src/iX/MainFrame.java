@@ -1,9 +1,13 @@
 package iX;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FileDialog;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -48,30 +52,35 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(150,50,1060,640);
 		this.setTitle("iXPAD");
-		this.setLayout(null);
+//		this.setLayout(null);
+		
+		// center the frame on the monitor
+        this.setLocationRelativeTo(null);
 		
 		frameContainer = this.getContentPane();
-		frameContainer.setLayout(null);
-		f = new Font("Arial",Font.BOLD,18);
+//		frameContainer.setLayout(null);
+		frameContainer.setLayout(new BorderLayout(2, 2));
+		f = new Font("Arial",Font.BOLD,28);
 				
 		// App name label
-		appName = new JLabel("iXPAD");
-		appName.setBounds(5,0,100,50);
-		
-		frameContainer.add(appName);
+		appName = new JLabel(" iXPAD");
+//		appName.setBounds(5,0,100,50);
+		appName.setFont(f);
 		
 		// Control button panel
 		buttonPanel = new JPanel();
-		buttonPanel.setBounds(0,45,250,640);
+		
+//		buttonPanel.setBounds(0,45,250,640);
 		buttonPanel.setBackground(Color.LIGHT_GRAY);
 		
 		// Control button panel layout
-		BoxLayout buttonPanelBoxLayout = new BoxLayout(buttonPanel, BoxLayout.Y_AXIS);
-		
-		buttonPanel.setLayout(buttonPanelBoxLayout);
+		//BoxLayout buttonPanelBoxLayout = new BoxLayout(buttonPanel, BoxLayout.Y_AXIS);
 
-		frameContainer.add(buttonPanel);
+		buttonPanel.setLayout(new GridLayout(12, 1, 0, 5));;
+
+		frameContainer.add(buttonPanel, BorderLayout.LINE_START);
 		
+		buttonPanel.add(appName);
 		// All Control Buttons
 		btnOpen = new JButton("Open");
 		addKeyShortcut(btnOpen, "Open", KeyStroke.getKeyStroke(KeyEvent.VK_O,ActionEvent.CTRL_MASK));
@@ -118,11 +127,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		buttonPanel.add(btnSearch);
 		buttonPanel.add(btnBookmarkIt);
 		
-		textEditorPanel = new JPanel();
-		textEditorPanel.setLayout(null);
-		textEditorPanel.setBounds(260,0,1060,640);
+		textEditorPanel = new JPanel(new BorderLayout());
+//		textEditorPanel.setLayout(null);
+//		textEditorPanel.setBounds(260,0,1060,640);
 		textEditorPanel.setBackground(Color.lightGray);
-		frameContainer.add(textEditorPanel);
 	    
 	    textEditor = new JTextArea();	    
 	    textEditor.setLineWrap(true);
@@ -138,8 +146,13 @@ public class MainFrame extends JFrame implements ActionListener{
         
 	
 	    JScrollPane textEditorScroll = new JScrollPane(textEditor);
-		textEditorScroll.setBounds(0,0,1060,640);
+		//textEditorScroll.setBounds(0,0,1060,640);
+	    textEditorScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	    
+	    
 		textEditorPanel.add(textEditorScroll);
+		
+		frameContainer.add(textEditorPanel, BorderLayout.CENTER);
 		
 		btnOpen.addActionListener(this);
 		btnNewPage.addActionListener(this);
