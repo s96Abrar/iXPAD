@@ -12,8 +12,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -220,6 +218,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		if (e.getSource() == btnRedo) {
 			redoFile();
+		}
+		
+		if (e.getSource() == btnSearch) {
+			new Find(textEditor);
 		}
 	}
 	
