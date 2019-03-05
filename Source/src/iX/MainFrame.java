@@ -122,12 +122,11 @@ public class MainFrame extends JFrame implements ActionListener{
 				
 				try {
 					BufferedReader br = new BufferedReader(new FileReader(filePath));
-					String str1 = "", str2 = "";
-					while ((str1 = br.readLine()) != null) {
-						str2 += str1 + "\n";
+					String currentLine = "";
+					while ((currentLine = br.readLine()) != null) {
+						textEditor.setText(currentLine + "\n");
 					}
 					
-					textEditor.setText(str2);
 					br.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
