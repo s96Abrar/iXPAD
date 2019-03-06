@@ -124,12 +124,12 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		btnUndo = new JButton("Undo");
 		btnUndo.setIcon(new ImageIcon("images/btnUndo.png"));
-		btnUndo.setVisible(false);
+		btnUndo.setEnabled(false);
 		addKeyShortcut(btnUndo, "Undo", KeyStroke.getKeyStroke(KeyEvent.VK_Z,ActionEvent.CTRL_MASK));
 		
 		btnRedo = new JButton("Redo");
 		btnRedo.setIcon(new ImageIcon("images/btnRedo.png"));
-		btnRedo.setVisible(false);
+		btnRedo.setEnabled(false);
 		addKeyShortcut(btnRedo, "Redo", KeyStroke.getKeyStroke(KeyEvent.VK_Y,ActionEvent.CTRL_MASK));
 		
 		btnSearch = new JButton("Search");
