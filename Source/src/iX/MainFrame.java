@@ -2,12 +2,15 @@ package iX;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -19,7 +22,12 @@ import java.io.FileReader;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+<<<<<<< HEAD
+import javax.swing.Icon;
+=======
+>>>>>>> 55c863d18892fdd70ce2aa3de85bd5075f52f55f
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
@@ -30,8 +38,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.text.Element;
 import javax.swing.undo.UndoManager;
 
 public class MainFrame extends JFrame implements ActionListener{
@@ -39,9 +52,11 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JLabel appName;
 	private JPanel buttonPanel, textEditorPanel;
 	private JButton btnOpen, btnNewPage, btnSave, btnSaveAs, btnCopy, btnPaste, btnCut, btnUndo, btnRedo, btnSearch, btnBookmarkIt;
-	private JTextArea textEditor;
+	private JTextArea textEditor, lines;
 	private UndoManager undoManager = new UndoManager();
 	private Font f;
+	
+	int caretpos;
 	
 	private String workFilePath;
 
@@ -146,9 +161,59 @@ public class MainFrame extends JFrame implements ActionListener{
 	    
 	    textEditor = new JTextArea();	    
 	    textEditor.setLineWrap(true);
-	    textEditor.setWrapStyleWord(true); 
-	    textEditor.getDocument().addUndoableEditListener(new UndoableEditListener(){
+	    textEditor.setWrapStyleWord(true);
+	    
+	    textEditor.addCaretListener(new CaretListener(){
+            @Override
+            public void caretUpdate(CaretEvent e){
+                JTextArea t = (JTextArea)e.getSource();
+                int line=1, col=1;
+                
+                try {
+                    caretpos = t.getCaretPosition();
+                    line = t.getLineOfOffset(caretpos);
+                    col = caretpos - t.getLineStartOffset(line);
+                    line++;
+                    col++;
+                } catch (Exception ex) { }
+                
+            }
+            
+        });
+	    
+	    lines = new JTextArea("1       "); 
+        lines.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.DARK_GRAY));
+        lines.setEditable(false);
+        lines.setBackground(Color.LIGHT_GRAY);
+        textEditor.getDocument().addDocumentListener(new DocumentListener(){
+            
+            public String getText(){
+                int pos=textEditor.getDocument().getLength();
+                Element root=textEditor.getDocument().getDefaultRootElement();
+                String t = "1       " + System.getProperty("line.separator");
+                
+                for(int i=2;i<root.getElementIndex(pos)+2;i++)
+                    t+= i + System.getProperty("line.separator");
+                return t;
+            }
 
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                lines.setText(getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                lines.setText(getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                lines.setText(getText());
+            }
+        });
+        
+	    textEditor.getDocument().addUndoableEditListener(new UndoableEditListener(){
             @Override
             public void undoableEditHappened(UndoableEditEvent e) {
             undoManager.addEdit(e.getEdit());
@@ -158,6 +223,7 @@ public class MainFrame extends JFrame implements ActionListener{
         
 	
 	    JScrollPane textEditorScroll = new JScrollPane(textEditor);
+	    textEditorScroll.setRowHeaderView(lines);
 		//textEditorScroll.setBounds(0,0,1060,640);
 	    textEditorScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	    
