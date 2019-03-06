@@ -24,10 +24,6 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-<<<<<<< HEAD
-import javax.swing.Icon;
-=======
->>>>>>> 55c863d18892fdd70ce2aa3de85bd5075f52f55f
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
@@ -128,10 +124,12 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		btnUndo = new JButton("Undo");
 		btnUndo.setIcon(new ImageIcon("images/btnUndo.png"));
+		btnUndo.setVisible(false);
 		addKeyShortcut(btnUndo, "Undo", KeyStroke.getKeyStroke(KeyEvent.VK_Z,ActionEvent.CTRL_MASK));
 		
 		btnRedo = new JButton("Redo");
 		btnRedo.setIcon(new ImageIcon("images/btnRedo.png"));
+		btnRedo.setVisible(false);
 		addKeyShortcut(btnRedo, "Redo", KeyStroke.getKeyStroke(KeyEvent.VK_Y,ActionEvent.CTRL_MASK));
 		
 		btnSearch = new JButton("Search");
