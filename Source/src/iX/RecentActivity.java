@@ -3,7 +3,6 @@ package iX;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -13,11 +12,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-import javax.print.DocFlavor.STRING;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class RecentActivity extends JFrame {
+public class RecentActivity extends JFrame implements ListSelectionListener {
 	public static final String activityFile = System.getProperty("user.home") + "/iXPADActivity.txt";
 
 	Container frameContainer;
@@ -43,7 +43,8 @@ public class RecentActivity extends JFrame {
 		frameContainer.setLayout(new BorderLayout(2, 2));
 		
 		recentList = new JList<String>();
-		frameContainer.add(recentList, BorderLayout.CENTER);		
+		frameContainer.add(recentList, BorderLayout.CENTER);
+		recentList.addListSelectionListener(this);
 	}
 	
 	private void loadActivity() {
@@ -74,7 +75,6 @@ public class RecentActivity extends JFrame {
 			e.printStackTrace();
 		}
 
-
 		ArrayList<Date> tdt = new ArrayList<Date>( dateTime );
 		
 		// Sorting on date time by descending order
@@ -84,6 +84,7 @@ public class RecentActivity extends JFrame {
 			public int compare(Date obj1, Date obj2) {
 				if (obj1 == null || obj2 == null)
 			        return 0;
+				
 			    return obj2.compareTo(obj1);
 			}
 		});
@@ -103,5 +104,12 @@ public class RecentActivity extends JFrame {
 	public static void saveActivity(String lastFilePath) {
 		String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH.mm.ss.SSS dd.MM.yyyy")) + "\t\t\t" + lastFilePath;
 		Utilities.appendStrToFile(str + "\n", activityFile);
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		MainFrame f = new MainFrame();
+		f.setVisible(true);
+		f.openFile(recentList.getSelectedValue());
 	}
 }

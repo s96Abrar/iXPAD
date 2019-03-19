@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import javax.swing.AbstractAction;
@@ -309,17 +310,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				String filePath = file.toString();
 				
 				try {
-					textEditor.setText("");
-					BufferedReader br = new BufferedReader(new FileReader(filePath));
-					String currentLine = "";
-					while ((currentLine = br.readLine()) != null) {
-						textEditor.append(currentLine + "\n");
-					}
-					
-					br.close();
-					
-					workFilePath = filePath;
-					setTitle(workFilePath + " - iXPAD");
+					openFile(filePath);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -354,9 +345,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		
 		if (e.getSource() == btnPaste) {
-			System.out.println("Test ");
-			test();
-			//textEditor.paste();
+			textEditor.paste();
 		}
 		
 		if (e.getSource() == btnUndo) {
@@ -372,9 +361,26 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 	}
 	
-	private void test() {
-		String str = textEditor.getSelectedText();
-		textEditor.replaceSelection(toStrTitleCase(str));
+	public void openFile(String filePath) {
+		textEditor.setText("");
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(filePath));
+
+			String currentLine = "";
+			while ((currentLine = br.readLine()) != null) {
+				textEditor.append(currentLine + "\n");
+			}
+			
+			br.close();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		workFilePath = filePath;
+		setTitle(workFilePath + " - iXPAD");
 	}
 	
 	private void addKeyShortcut(JButton button, String actionText, KeyStroke ks) {
