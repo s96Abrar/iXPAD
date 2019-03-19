@@ -9,11 +9,11 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 
 import javax.swing.AbstractAction;
@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -49,7 +50,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	
 	int caretpos;
 	
-	private String workFilePath;
+	private String workFilePath = "";
 
 	MainFrame() {
 		initComponents();
@@ -276,6 +277,26 @@ public class MainFrame extends JFrame implements ActionListener {
 		btnBookmarkIt.addActionListener(this);
 		
 		undoManager.setLimit(1000);
+		
+		MainFrame p = this;
+        WindowListener exitListener = new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int confirm = JOptionPane.showOptionDialog(p,
+                        "Are You Sure to Close this Application?",
+                        "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    System.out.println(System.getProperty("user.home"));
+                    if (!workFilePath.isEmpty()) {
+                    	RecentActivity.saveActivity(workFilePath);
+                    }
+                    System.exit(1);
+                }
+            }
+        };
+        this.addWindowListener(exitListener);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -306,10 +327,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		
 		if (e.getSource() == btnSave) {
+			// TODO: check the work file path before saving it and move it to safe
 			String fileName = workFilePath;
 			File file = new File(fileName);
 			if (file.exists()) {
-				if (saveFile(fileName)) {
+				if (Utilities.saveFile(textEditor.getText(), fileName)) {
 					textEditor.requestFocus();
 				}
 			} else {
@@ -374,7 +396,7 @@ public class MainFrame extends JFrame implements ActionListener {
         if (fd.getFile() != null) {
             String fileName = fd.getDirectory() + fd.getFile();
 
-            if (saveFile(fileName)) {
+            if (Utilities.saveFile(textEditor.getText(), fileName)) {
                 workFilePath = fileName;
                 setTitle(fileName.substring(fileName.lastIndexOf("\\") + 1) + "iXPAD");
                 
@@ -383,20 +405,6 @@ public class MainFrame extends JFrame implements ActionListener {
         }
         
         return false;
-	}
-	
-	private boolean saveFile(String filePath) {
-		try {
-			DataOutputStream d = new DataOutputStream(new FileOutputStream(filePath));
-            String line = textEditor.getText();
-            d.writeBytes(line);
-            d.close();
-		} catch (Exception ex) {
-            System.out.println("File not found");
-			return false;
-		}
-		
-		return true;
 	}
 	
 	public void undoFile(){
