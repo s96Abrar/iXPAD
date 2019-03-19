@@ -2,18 +2,14 @@ package iX;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FileDialog;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -23,7 +19,6 @@ import java.io.FileReader;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
@@ -43,7 +38,7 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.text.Element;
 import javax.swing.undo.UndoManager;
 
-public class MainFrame extends JFrame implements ActionListener{
+public class MainFrame extends JFrame implements ActionListener {
 	private Container frameContainer;
 	private JLabel appName;
 	private JPanel buttonPanel, textEditorPanel;
@@ -218,8 +213,46 @@ public class MainFrame extends JFrame implements ActionListener{
             updateUndoRedo();
             }    
         });
-        
-	
+	    
+	    // To upper case shortcut
+	    String key = "UpperCase";
+	    textEditor.getInputMap(JTextArea.WHEN_IN_FOCUSED_WINDOW).put(
+	            KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK), key);
+	     
+	    textEditor.getActionMap().put(key, new AbstractAction(key) {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				textEditor.replaceSelection(toStrUpperCase(textEditor.getSelectedText()));
+			}
+		});
+	    
+	    // To lower case shortcut
+	    key = "LowerCase";
+	    textEditor.getInputMap(JTextArea.WHEN_IN_FOCUSED_WINDOW).put(
+	            KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK), key);
+	     
+	    textEditor.getActionMap().put(key, new AbstractAction(key) {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				textEditor.replaceSelection(toStrLowerCase(textEditor.getSelectedText()));
+			}
+		});
+
+	    // To title case shortcut
+	    key = "TitleCase";
+	    textEditor.getInputMap(JTextArea.WHEN_IN_FOCUSED_WINDOW).put(
+	            KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK), key);
+	     
+	    textEditor.getActionMap().put(key, new AbstractAction(key) {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				textEditor.replaceSelection(toStrTitleCase(textEditor.getSelectedText()));
+			}
+		});
+	    
 	    JScrollPane textEditorScroll = new JScrollPane(textEditor);
 	    textEditorScroll.setRowHeaderView(lines);
 		//textEditorScroll.setBounds(0,0,1060,640);
@@ -299,7 +332,9 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 		
 		if (e.getSource() == btnPaste) {
-			textEditor.paste();
+			System.out.println("Test ");
+			test();
+			//textEditor.paste();
 		}
 		
 		if (e.getSource() == btnUndo) {
@@ -313,6 +348,11 @@ public class MainFrame extends JFrame implements ActionListener{
 		if (e.getSource() == btnSearch) {
 			new Find(textEditor);
 		}
+	}
+	
+	private void test() {
+		String str = textEditor.getSelectedText();
+		textEditor.replaceSelection(toStrTitleCase(str));
 	}
 	
 	private void addKeyShortcut(JButton button, String actionText, KeyStroke ks) {
@@ -380,5 +420,51 @@ public class MainFrame extends JFrame implements ActionListener{
 	public void updateUndoRedo(){
         btnUndo.setEnabled(undoManager.canUndo());
         btnRedo.setEnabled(undoManager.canRedo());
+    }
+	
+	// Move to Editor class
+	public String toStrUpperCase(String str) {
+		if (str.isEmpty()) {
+			return null;
+		}
+		
+		return str.toUpperCase();
+	}
+	
+	public String toStrLowerCase(String str) {
+		if (str.isEmpty()) {
+			return null;
+		}
+		
+		return str.toLowerCase();
+	}
+	
+	public String toStrTitleCase(String str) {
+		if (str.isEmpty()) {
+            return "";
+        }
+ 
+        if (str.length() == 1) {
+            return str.toUpperCase();
+        }
+ 
+        StringBuffer replaceStr = new StringBuffer(str.length());
+ 
+        for (String line : str.split("\n")) {
+	        String[] tStr = line.split(" ");
+	        for (String s : tStr) {
+	        	if (s.length() > 1) {
+	        		replaceStr.append(s.substring(0, 1).toUpperCase())
+	        				  .append(s.substring(1).toLowerCase());
+	        	} else {
+	        		replaceStr.append(s.toUpperCase());
+	        	}
+	        	
+	        	replaceStr.append(" ");
+	        }
+	        replaceStr.append("\n");
+        }
+        
+        return new String(replaceStr).trim();
     }
 }
