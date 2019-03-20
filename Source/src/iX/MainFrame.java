@@ -48,6 +48,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JTextArea textEditor, lines;
 	private UndoManager undoManager = new UndoManager();
 	private Font f;
+	private JButton btnActivity, btnBookmark;
 	
 	int caretpos;
 	
@@ -69,7 +70,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		frameContainer = this.getContentPane();
 //		frameContainer.setLayout(null);
 		frameContainer.setLayout(new BorderLayout(2, 2));
-		f = new Font("Arial",Font.BOLD,28);
+		f = new Font("Arial", Font.BOLD, 28);
 				
 		// App name label
 		appName = new JLabel(" iXPAD");
@@ -85,7 +86,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		// Control button panel layout
 		//BoxLayout buttonPanelBoxLayout = new BoxLayout(buttonPanel, BoxLayout.Y_AXIS);
 
-		buttonPanel.setLayout(new GridLayout(12, 1, 0, 5));;
+		buttonPanel.setLayout(new GridLayout(18, 1, 0, 5));;
 
 		frameContainer.add(buttonPanel, BorderLayout.LINE_START);
 		
@@ -137,6 +138,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		btnBookmarkIt.setIcon(new ImageIcon("images/btnBookmarkIt.png"));
 		addKeyShortcut(btnBookmarkIt, "Bookmark It", KeyStroke.getKeyStroke(KeyEvent.VK_B,ActionEvent.CTRL_MASK));
 		
+		btnActivity = new JButton("Recent Activity");
+		btnBookmark = new JButton("Bookmark List");
+		
 		buttonPanel.add(btnOpen);
 		buttonPanel.add(btnNewPage);
 		buttonPanel.add(btnSave);
@@ -148,6 +152,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		buttonPanel.add(btnRedo);
 		buttonPanel.add(btnSearch);
 		buttonPanel.add(btnBookmarkIt);
+		
+		buttonPanel.add(btnActivity);
+		buttonPanel.add(btnBookmark);
 		
 		textEditorPanel = new JPanel(new BorderLayout());
 //		textEditorPanel.setLayout(null);
@@ -277,6 +284,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		btnSearch.addActionListener(this);
 		btnBookmarkIt.addActionListener(this);
 		
+		btnActivity.addActionListener(this);
+		btnBookmark.addActionListener(this);
+		
 		undoManager.setLimit(1000);
 		
 		MainFrame p = this;
@@ -358,6 +368,21 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		if (e.getSource() == btnSearch) {
 			new Find(textEditor);
+		}
+		
+		// TODO: Add bookmarkIt function
+		if (e.getSource() == btnBookmarkIt) {
+			
+		}
+		
+		// TODO: Remove Test
+		if (e.getSource() == btnBookmark) {
+			
+		}
+		
+		if (e.getSource() == btnActivity) {
+			RecentActivity iXActivity = new RecentActivity();
+			iXActivity.setVisible(true);
 		}
 	}
 	
