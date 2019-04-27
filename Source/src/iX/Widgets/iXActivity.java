@@ -37,7 +37,7 @@ public class iXActivity extends JFrame implements ListSelectionListener {
 	}
 	
 	private void setupUi() {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setBounds(150,50,1060,640);
 		this.setTitle("iXPAD - Recent Activity");
 		
