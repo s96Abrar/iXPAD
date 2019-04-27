@@ -1,19 +1,31 @@
-package iX;
+package iX.Widgets;
 
-import javax.swing.*;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+
 import java.awt.event.ActionEvent;
 
-public class Find extends JFrame implements ActionListener {
+public class iXSearch extends JFrame implements ActionListener {
 
-    int startIndex=0;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	int startIndex=0;
     int select_start=-1;
     JLabel lab1, lab2;
     JTextField textF, textR;
     JButton findBtn, findNext, replace, replaceAll, cancel;
-    private JTextArea txt;
+    private JTextPane txt;
 
-    public Find(JTextArea text) {
+    public iXSearch(JTextPane text) {
         this.txt = text;
 
         lab1 = new JLabel("Find:");
@@ -79,6 +91,7 @@ public class Find extends JFrame implements ActionListener {
     }
 
     public void find() {
+    	txt.requestFocus();
         select_start = txt.getText().toLowerCase().indexOf(textF.getText().toLowerCase());
         if(select_start == -1)
         {
@@ -92,6 +105,7 @@ public class Find extends JFrame implements ActionListener {
         }
         int select_end = select_start + textF.getText().length();
         txt.select(select_start, select_end);
+        txt.requestFocus();
     }
 
     public void findNext() {

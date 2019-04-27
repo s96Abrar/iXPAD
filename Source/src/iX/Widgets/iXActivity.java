@@ -1,4 +1,4 @@
-package iX;
+package iX.Widgets;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -17,13 +17,18 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class RecentActivity extends JFrame implements ListSelectionListener {
+public class iXActivity extends JFrame implements ListSelectionListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final String activityFile = System.getProperty("user.home") + "/iXPADActivity.txt";
 
 	Container frameContainer;
 	JList<String> recentList;
 	
-	public RecentActivity() {
+	public iXActivity() {
 		// Load the last activity
 		System.out.println("Recent Activity Initializing...");
 		
