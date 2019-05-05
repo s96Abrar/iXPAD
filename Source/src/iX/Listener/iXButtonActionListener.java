@@ -43,6 +43,8 @@ public class iXButtonActionListener implements ActionListener{
 	public void actionPerformed(ActionEvent e) {		
 		if (e.getActionCommand() == "Open") {
 			ixEditor.openFile();
+		} else if (e.getActionCommand() == "New Page") {
+			ixPAD.createTab();
 		} else if (e.getActionCommand() == "Save") {
 			ixEditor.saveFile();
 		} else if (e.getActionCommand() == "Save As") {

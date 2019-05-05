@@ -87,6 +87,8 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		ixPAD = (iXPAD) parentParent;
 		ixUtil = new iXUtility();
 		ixEditorUndoManage = new UndoManager();
+		
+		act = "Change";
 		// ====================
 		
 		// Initialize UI
@@ -133,19 +135,6 @@ public class iXEditor extends JTextPane implements DocumentListener {
 			editorAction = new iXEditorAbstractAction(keyText);
 			ixUtil.addKeyShortcut(this, keyText, KeyStroke.getKeyStroke(keyEvent, ActionEvent.CTRL_MASK), editorAction);
 		}
-		
-		// TODO Remove
-//		keyText = "UpperCase";
-//		editorAction = new iXEditorAbstractAction(keyText);
-//		ixUtil.addKeyShortcut(this, keyText, KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK), editorAction);
-//		
-//		keyText = "LowerCase";
-//		editorAction = new iXEditorAbstractAction(keyText);
-//		ixUtil.addKeyShortcut(this, keyText, KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK), editorAction);
-//		
-//		keyText = "TitleCase";
-//		editorAction = new iXEditorAbstractAction(keyText);
-//		ixUtil.addKeyShortcut(this, keyText, KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK), editorAction);
 	}
 	
 	public void appendString(String str) {
@@ -200,14 +189,14 @@ public class iXEditor extends JTextPane implements DocumentListener {
 	public void saveFile() {
 		// TODO: check the work file path before saving it and move it to safe
 		String filePath = workFilePath;
-		File f = new File(filePath);
 		
-		if (filePath == null || f.exists() == false) {
+		if (filePath == null) {
+			filePath = saveFileDialog();
+		} else {
+			File f = new File(filePath);
 			if (f.exists() == false) {
 				System.out.println("iXPAD : File not exists " + f.getAbsolutePath());
 			}
-			filePath = saveFileDialog();
-		} else {
 			ixUtil.saveToFile(getText(), filePath);
 		}
 	}
@@ -397,6 +386,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 	
 	private void updateSyntaxColor(int offset, int length, Color c, int style, String Operation){
 //		getDocument().removeUndoableEditListener(ixUndoListener);
+		System.out.println("Offset " + offset + " length " + length);
 		
 		act = "color";
 		System.out.println(Operation + " " + offset + " " + length);
@@ -440,13 +430,167 @@ public class iXEditor extends JTextPane implements DocumentListener {
 	String stringPattern = "\"[^\"\\\\]*(\\\\(.|\\n)[^\"\\\\]*)*\"|'[^'\\\\]*(\\\\(.|\\n)[^'\\\\]*)*'";
 	String multiLineCommentPattern = "/\\*(.|[\\r\\n])*?\\*/";
 	
+	class SyntaxRule {
+		String rule;
+		String startRule;
+		String endRule;
+		Color color;
+		int font;
+		SyntaxRule(String r, String sr, String er, Color c, int f) {
+			rule = r;
+			startRule = sr;
+			endRule = er;
+			color = c;
+			font = f;
+		}
+	}
+	
+	SyntaxRule[] syntax_rules = {new SyntaxRule(null, "/\\*", "\\*/", Color.red, Font.ITALIC),
+								 new SyntaxRule(commentPattern, null, null, Color.green, Font.ITALIC),
+								 new SyntaxRule(comment2Pattern, null, null, Color.blue, Font.BOLD + Font.ITALIC)}; 
+	
 	private void syntaxHighlight() {
     	Runnable syntaxHighlight = new Runnable() {
             public void run() {
             	Element root = getDocument().getDefaultRootElement();
-            	int start = getCurrentLineStartEndOffset(root).x;
-            	
+            	int start = getCurrentLineStartEndOffset(root).x;            	
             	String textStr = getCurrentLineBlock(root);
+            	
+//            	int start = 0;
+//            	int splitactive = Pattern.compile("/\\*").matcher(getText()).find() ? 0 : -1;
+//            	if (splitactive > syntax_rules.length - 1) {
+//            		splitactive = -1;
+//            	}
+//            	System.out.println("Split + " + splitactive + " start " + start + " text " + getCaretPosition());
+//            	
+//            	while(start >= 0 && (getCaretPosition() - start) <= textStr.length() - 1) {
+//            		if (splitactive >= 0) {
+//            			Pattern p = Pattern.compile(syntax_rules[0].endRule);
+//            			Matcher m = p.matcher(textStr);
+//            			if (m.find() == false) {
+//            				System.out.println("No end rule" + start + " length " + (textStr.length()-(getCaretPosition() - start) + 1));
+//            				if (start > 0) {
+//            					updateSyntaxColor(start - 1, textStr.length()-(getCaretPosition() - start) + 1, syntax_rules[0].color, syntax_rules[0].font, "Multi");
+//            				} else {
+//            					updateSyntaxColor(start, textStr.length()-start, syntax_rules[0].color, syntax_rules[0].font, "Multi");
+//            				}
+//            				
+//            				break;
+//            			} else {
+//                			int end = m.end();
+//            				int len = end - start + (end - m.start());
+//            				System.out.println("end rule" + start + " length " + len + " end " + end);
+//
+//            				if (start > 0) { start--; len++;}
+//            				updateSyntaxColor(start, len, syntax_rules[0].color, syntax_rules[0].font, "multiSame");
+//            				start += len;
+//            				splitactive = -1;
+//            			}
+////            			System.out.println("End " + end);
+//            		}
+//            		for (int i = 0; i < syntax_rules.length && splitactive < 0; i++) {
+//            			if (syntax_rules[i].startRule == null) {continue;}
+//            			Pattern p = Pattern.compile(syntax_rules[i].startRule);
+//            			Matcher m = p.matcher(textStr);
+//            			if (m.find() == false) {continue;}
+//            			int newStart = m.start();
+//            			System.out.println("Other pattern " + newStart);
+//            			if (newStart >= start) {
+//            				splitactive = i;
+//                            start = newStart+1;
+//                            if (start >= textStr.length()-1) {
+//                            	updateSyntaxColor(start - 1, textStr.length()-start + 1, syntax_rules[i].color, syntax_rules[i].font, "Multi");
+//                            }
+//            			}
+//            		}
+//            		
+//            		if (splitactive < 0) {
+//            			break;
+//            		}
+//            	}
+//            	
+//            	for (int i = 0; i < syntax_rules.length; i++){
+//                    if (syntax_rules[i].rule == null){ continue; }
+//                    Pattern p = Pattern.compile(syntax_rules[i].rule);
+//                    Matcher m = p.matcher(textStr);
+//                    
+//                    if (m.find() == false) {continue;}
+//                    int index = m.start();
+//                    System.out.println("Other rules " + index);
+//                    //if(splitactive>=0 || index<start){ continue; } //skip this one - falls within a multi-line pattern above
+//
+//                    while (index > -1) {
+//                    	updateSyntaxColor(m.start(), m.end() - m.start(), syntax_rules[i].color, syntax_rules[i].font, "O");
+//                    	if (m.find()) {
+//                    		index = m.start();
+//                    	} else {
+//                    		index = -1;
+//                    	}
+//                    }
+//                    while(index>=0){
+//                        int len = Pattern.compile(syntax_rules[i].rule).matcher(textStr).end() + s;
+//                        if(format(index)==currentBlock().charFormat())
+//                        {
+//                        	updateSyntaxColor(index, len, syntax_rules[i].color, syntax_rules[i].font, "o");
+//                        } //only apply highlighting if not within a section already
+//                        index = patt.indexIn(text, index+len); //go to the next match
+//                    }
+//                }
+            	
+            	/*
+            	 * int start = 0;
+        int splitactive = previousBlockState();
+        if(splitactive>syntax.rules.length()-1){ splitactive = -1; } //just in case
+        while(start>=0 && start<=text.length()-1){
+            if(splitactive>=0){
+                //Find the end of the current rule
+                int end = syntax.rules[splitactive].endPattern.indexIn(text, start);
+                if(end==-1){                   //rule did not finish - apply to all
+                    if(start>0){ setFormat(start-1, text.length()-start+1, syntax.rules[splitactive].format); }
+                    else{ setFormat(start, text.length()-start, syntax.rules[splitactive].format); }
+                    break; //stop looking for more multi-line patterns
+                } else {
+                    //Found end point within the same line
+                    int len = end-start+syntax.rules[splitactive].endPattern.matchedLength();
+                    if(start>0){ start--; len++; } //need to include the first character as well
+                    setFormat(start, len , syntax.rules[splitactive].format);
+                    start+=len; //move pointer to the end of handled range
+                    splitactive = -1; //done with this rule
+                }
+            }            //end check for end match            //Look for the start of any new split rules
+            for(int i=0; i<syntax.rules.length() && splitactive<0; i++){
+                if(syntax.rules[i].startPattern.isEmpty()){ continue; }
+                int newstart = syntax.rules[i].startPattern.indexIn(text,start);
+                if(newstart>=start){
+                    splitactive = i;
+                    start = newstart+1;
+                    if(start>=text.length()-1){
+                        //Need to apply highlighting to this section too - start matches the end of the line
+                        setFormat(start-1, text.length()-start+1, syntax.rules[splitactive].format);
+                    }
+                }
+           }
+           if(splitactive<0){  break; } //no other rules found - go ahead and exit the loop
+        } //end scan over line length and multi-line formats
+
+        qDebug() << text;
+        setCurrentBlockState(splitactive);
+        //Do all the single-line patterns
+        for(int i=0; i<syntax.rules.length(); i++){
+            if(syntax.rules[i].pattern.isEmpty()){ continue; } //not a single-line rule
+            QRegExp patt(syntax.rules[i].pattern); //need a copy of the rule's pattern (will be changing it below)
+            int index = patt.indexIn(text);
+            if(splitactive>=0 || index<start){ continue; } //skip this one - falls within a multi-line pattern above
+            while(index>=0){
+                int len = patt.matchedLength();
+                if(format(index)==currentBlock().charFormat()){ setFormat(index, len, syntax.rules[i].format); } //only apply highlighting if not within a section already
+                index = patt.indexIn(text, index+len); //go to the next match
+            }
+        }//end loop over normal (single-line) patterns
+
+            	 */
+            	
+            	
             	
             	{ // Default string
 	        		//Pattern pattern = Pattern.compile(defaultPattern);				

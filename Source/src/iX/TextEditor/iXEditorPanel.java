@@ -51,7 +51,6 @@ public class iXEditorPanel extends JPanel {
 		BorderLayout defaultLayout = new BorderLayout();
 		
 		ixEditor = new iXEditor(editorPanelParent);
-		ixEditor.appendString("ABRAR");
 		ixEditorLineNumberArea = new iXEditorLineNumberArea(ixEditor.getDocument(), ixEditor.getForeground(), ixEditor.getBackground());
 		
 		ixEditorScrollPane = new JScrollPane();

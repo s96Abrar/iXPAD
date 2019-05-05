@@ -127,13 +127,13 @@ public class iXActivity extends JFrame implements ListSelectionListener {
 	
 	public static void saveActivity(String lastFilePath) {
 		String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH.mm.ss.SSS dd.MM.yyyy")) + "\t\t\t" + lastFilePath;
-		Utilities.appendStrToFile(str + "\n", activityFile);
+//		Utilities.appendStrToFile(str + "\n", activityFile);
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		MainFrame f = new MainFrame();
-		f.setVisible(true);
-		f.openFile(recentList.getSelectedValue());
+//		MainFrame f = new MainFrame();
+//		f.setVisible(true);
+//		f.openFile(recentList.getSelectedValue());
 	}
 }

@@ -22,21 +22,22 @@ package iX.Widgets;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 import iX.Utilities.iXUtility;
 import iX.Listener.iXButtonActionListener;
@@ -76,11 +77,12 @@ public class iXPAD extends JFrame {
 	private JButton btnPinIt;	
 	private JButton[] buttons;
 	
-	private iXEditorPanel editorPanel;
+	private iXTabPane ixTabPane;	
 	// ========================
 	
 	// Declaring Variables	
 	iXUtility ixUtil;
+	int iXTabCount;
 	// ===================
 
 	public iXPAD() {	
@@ -94,16 +96,18 @@ public class iXPAD extends JFrame {
 	}
 	
 	private void setupUI() {
+		// Initialize variables
+		iXTabCount = 0;
+		
 		// Set frame properties
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setSize(800, 600);
+		setMinimumSize(new Dimension(800, 600));
 		setTitle("iXPAD");		 
 		setLocationRelativeTo(null); // Place the frame to the center of the monitor.
 		addWindowListener(new iXWindowListener(this));
 		// ====================
 		
 		// Initialize all layout
-		GridLayout buttonPanelLayout = new GridLayout(12, 1, 0, 5);
 		BorderLayout mainLayout = new BorderLayout(2, 2);
 		// =====================
 		
@@ -114,7 +118,6 @@ public class iXPAD extends JFrame {
 		
 		// Initialize application name
 		appName = new JLabel("iXPAD");
-		appName.setAlignmentY(RIGHT_ALIGNMENT);
 		appName.setFont(new Font("Arial", Font.BOLD, 28));
 		//====================
 		
@@ -125,32 +128,17 @@ public class iXPAD extends JFrame {
 		// TODO Remove
 //		btnOpen.setIcon(ixUtil.getImageResource("btnOpen.png"));
 		
-		btnNewPage = new JButton("New Page");
-		// TODO Remove
-//		btnNewPage.setIcon(ixUtil.getImageResource("btnNewPage.png"));
-		
+		btnNewPage = new JButton("New Page");		
 		btnSave = new JButton("Save");
-		// TODO Remove
-//		btnSave.setIcon(ixUtil.getImageResource("btnSave.png"));
-		
 		btnSaveAs = new JButton("Save As");
-		// TODO Remove
-//		btnSaveAs.setIcon(ixUtil.getImageResource("btnSaveAs.png"));
-		
 		btnCopy = new JButton("Copy");
-		
-		btnPaste = new JButton("Paste");
-		
-		btnCut = new JButton("Cut");
-		
-		btnUndo = new JButton("Undo");
-		
-		btnRedo = new JButton("Redo");
-		
-		btnSearch = new JButton("Search");
-		
+		btnPaste = new JButton("Paste");		
+		btnCut = new JButton("Cut");		
+		btnUndo = new JButton("Undo");		
+		btnRedo = new JButton("Redo");		
+		btnSearch = new JButton("Search");		
 		btnPinIt = new JButton("Pin It");
-				
+		
 		buttons = new JButton[] {
 									btnOpen,
 									btnNewPage,
@@ -164,16 +152,19 @@ public class iXPAD extends JFrame {
 									btnSearch,
 									btnPinIt
 								};		
-		
-		// FIXME Difference between button is too big
+
 		for (JButton btn : buttons) {
 			if (btn == null) {
 				continue;
 			}
 			
+			btn.setUI(new BasicButtonUI());
+			btn.setContentAreaFilled(false);
+			btn.setRolloverEnabled(true);	
+			
 			String btnText = btn.getText().replaceAll("\\b \\b", "");
 			btn.setIcon(ixUtil.getImageResource("btn" + btnText + ".png"));
-			btn.setHorizontalAlignment(JButton.LEFT);
+			btn.setHorizontalAlignment(JButton.LEFT);			
 			
 			KeyStroke actionKey = getButtonKeyStroke(btn.getText());
 			if (actionKey != null) {
@@ -181,17 +172,10 @@ public class iXPAD extends JFrame {
 			} else {
 				System.out.println("iXPAD : Action key not found for " + btn.getText()); 
 			}
-			
-			// Removes border from button
-//			btn.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-//			btn.setHorizontalAlignment(JButton.LEADING); 
-//			btn.setBorderPainted(false);
-//			btn.setContentAreaFilled(false);
-
-			// TODO Remove not working
-//			btn.setMaximumSize(new Dimension(20, 22));
 		}
 		
+		btnUndo.setEnabled(false);
+		btnRedo.setEnabled(false);
 		// ==============================
 		
 		// Initialize panel's
@@ -199,26 +183,19 @@ public class iXPAD extends JFrame {
 		// buttonPanel
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.LIGHT_GRAY);
-//		buttonPanel.setLayout(new BorderLayout());
+		
 		GridBagLayout bg = new GridBagLayout();
 		buttonPanel.setLayout(bg);
 		
-		// Add control buttons to button panel
-		// TODO Remove
-//		buttonPanel.add(btnOpen);
-//		buttonPanel.add(btnNewPage);
-//		buttonPanel.add(btnSave);
-//		buttonPanel.add(btnSaveAs);
-		
-		// TODO Make the layout with GridBagLayout
 		GridBagConstraints bgc = new GridBagConstraints();
+		
 		bgc.gridx = 0;
 		bgc.gridy = 0;
-		bgc.weighty = 4;
-		bgc.fill = GridBagConstraints.CENTER;
-		
+		bgc.weighty = 0.1;
+		bgc.fill = GridBagConstraints.CENTER;		
 		buttonPanel.add(appName, bgc);
-		bgc.weighty = 1;
+		
+		bgc.weighty = 0.01;
 		bgc.fill = GridBagConstraints.HORIZONTAL;
 		int i = 0;
 		for (JButton btn : buttons) {
@@ -226,27 +203,49 @@ public class iXPAD extends JFrame {
 			buttonPanel.add(btn, bgc);
 		}
 		
-		// editorPanel
-		editorPanel = new iXEditorPanel(this);
-		
+		bgc.gridy = ++i;
+		bgc.weighty = 0.9;
+		buttonPanel.add(Box.createVerticalGlue(), bgc);
+		// ===================
+		// iXTabPane
+		ixTabPane = new iXTabPane();
+		createTab();		
 		// ==================
 		
 		// Add all component in container
 		mainContainer.add(buttonPanel, BorderLayout.LINE_START);
-		mainContainer.add(editorPanel, BorderLayout.CENTER);
+		mainContainer.add(ixTabPane, BorderLayout.CENTER);
 		// ======================
 		
-		// Initialize listener
+		// Initialize button action listener
 		iXButtonActionListener act = new iXButtonActionListener(this);
 		for (JButton btn : buttons) {
 			btn.addActionListener(act);
 		}
+		// ===================
+
+		pack();
+		getiXEditor().requestFocusInWindow();
 		
-		System.out.println(getComponentCount());
+	}
+
+	public void createTab() {
+		if (iXTabCount == 0) {
+			ixTabPane.addiXEditorPanel(new iXEditorPanel(this), "Untitled" + iXTabCount++);
+		} else {
+			ixTabPane.addiXEditorPanel(new iXEditorPanel(this), "Untitled" + iXTabCount++);
+		}
 	}
 	
 	public iXEditor getiXEditor() {
-		return editorPanel.getiXTextEditor();
+//		return editorPanel.getiXTextEditor();
+		if (ixTabPane.getEditorPanel() == null) {
+			System.out.println("Null editor");
+			return null;
+		}
+		
+		System.out.println("Editor found");
+		return ixTabPane.getEditorPanel().getiXTextEditor();
 	}
 	
 //	private boolean getiXEditorManageCanUndo() {
