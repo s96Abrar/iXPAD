@@ -74,7 +74,11 @@ public class iXPAD extends JFrame {
 	private JButton btnUndo;
 	private JButton btnRedo;
 	private JButton btnSearch;
-	private JButton btnPinIt;	
+	private JButton btnActivity;
+	private JButton btnPinIt;
+	private JButton btnPinView;
+	private JButton btnSettings;
+	private JButton btnAbout;
 	private JButton[] buttons;
 	
 	private iXTabPane ixTabPane;	
@@ -100,11 +104,11 @@ public class iXPAD extends JFrame {
 		iXTabCount = 0;
 		
 		// Set frame properties
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setMinimumSize(new Dimension(800, 600));
-		setTitle("iXPAD");		 
-		setLocationRelativeTo(null); // Place the frame to the center of the monitor.
-		addWindowListener(new iXWindowListener(this));
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setMinimumSize(new Dimension(800, 600));
+		this.setTitle("iXPAD");		 
+		this.setLocationRelativeTo(null); // Place the frame to the center of the monitor.
+		this.addWindowListener(new iXWindowListener(this));
 		// ====================
 		
 		// Initialize all layout
@@ -136,8 +140,12 @@ public class iXPAD extends JFrame {
 		btnCut = new JButton("Cut");		
 		btnUndo = new JButton("Undo");		
 		btnRedo = new JButton("Redo");		
-		btnSearch = new JButton("Search");		
+		btnSearch = new JButton("Search");
+		btnActivity = new JButton("Activity");
 		btnPinIt = new JButton("Pin It");
+		btnPinView = new JButton("Pin View");
+		btnSettings = new JButton("Settings");
+		btnAbout = new JButton("About");
 		
 		buttons = new JButton[] {
 									btnOpen,
@@ -150,7 +158,11 @@ public class iXPAD extends JFrame {
 									btnUndo,
 									btnRedo,
 									btnSearch,
-									btnPinIt
+									btnActivity,
+									btnPinIt,
+									btnPinView,
+									btnSettings,
+									btnAbout
 								};		
 
 		for (JButton btn : buttons) {
@@ -182,7 +194,7 @@ public class iXPAD extends JFrame {
 		
 		// buttonPanel
 		buttonPanel = new JPanel();
-		buttonPanel.setBackground(Color.LIGHT_GRAY);
+//		buttonPanel.setBackground(Color.LIGHT_GRAY);
 		
 		GridBagLayout bg = new GridBagLayout();
 		buttonPanel.setLayout(bg);
@@ -237,6 +249,30 @@ public class iXPAD extends JFrame {
 		}
 	}
 	
+	public void showPinView() { 
+		iXPin ixPin = new iXPin(this);
+		ixPin.setVisible(true);
+	}
+	
+
+	public void showActivity() {
+		iXActivity activity = new iXActivity(this);
+		activity.setVisible(true);;
+	}
+
+	public void pinIt() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void showSettings() {
+		
+	}
+	
+	public void showAbout() {
+		
+	}
+	
 	public iXEditor getiXEditor() {
 //		return editorPanel.getiXTextEditor();
 		if (ixTabPane.getEditorPanel() == null) {
@@ -282,8 +318,20 @@ public class iXPAD extends JFrame {
 			key = KeyEvent.VK_Y;
 		} else if (buttonText == "Search") {
 			key = KeyEvent.VK_F;
-		} else if (buttonText == "Bookmark It") {
+		} else if (buttonText == "Activity") {
+			key = KeyEvent.VK_A;
+			modifier |= ActionEvent.SHIFT_MASK;			
+		} else if (buttonText == "Pin It") {
 			key = KeyEvent.VK_B;
+		} else if (buttonText == "Pin View") {
+			key = KeyEvent.VK_B;
+			modifier |= ActionEvent.SHIFT_MASK;
+		} else if (buttonText == "Settings") {
+			key = KeyEvent.VK_S;
+			modifier |= ActionEvent.ALT_MASK;
+		} else if (buttonText == "About") {
+			key = KeyEvent.VK_A;
+			modifier |= ActionEvent.ALT_MASK;
 		} else {
 			return null;
 		}
@@ -312,4 +360,6 @@ public class iXPAD extends JFrame {
 		}
 		
 	}
+
+
 }

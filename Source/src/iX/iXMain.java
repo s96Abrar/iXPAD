@@ -19,11 +19,34 @@
 
 package iX;
 
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
 import iX.Widgets.iXPAD; 
 
 public class iXMain {
 
 	public static void main(String[] args) {
+		try {
+			String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+			String linuxGTK = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+			
+			String osName = System.getProperty("os.name");
+			System.out.println(osName);
+			
+			if (osName.equals("Linux")) {
+				System.out.println(osName + linuxGTK);
+				UIManager.setLookAndFeel(linuxGTK);
+			} else {
+				UIManager.setLookAndFeel(windows);
+			}
+			
+			for (LookAndFeelInfo f : UIManager.getInstalledLookAndFeels()) {
+				System.out.println(f.toString());
+			}
+		} catch(Exception e) {
+			
+		}
 		iXPAD ixpad = new iXPAD();
 		ixpad.setVisible(true);
 	}

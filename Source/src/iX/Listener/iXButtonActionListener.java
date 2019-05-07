@@ -61,6 +61,18 @@ public class iXButtonActionListener implements ActionListener{
 			ixEditor.redo();
 		} else if (e.getActionCommand() == "Search") {
 			ixEditor.search();
+		} else if (e.getActionCommand() == "Activity") {
+			ixPAD.showActivity();
+		} else if (e.getActionCommand() == "Pin It") {
+			ixPAD.pinIt();
+		} else if (e.getActionCommand() == "Pin View") {
+			ixPAD.showPinView();
+		} else if (e.getActionCommand() == "Settings") {
+			ixPAD.showSettings();
+		} else if (e.getActionCommand() == "About") {
+			ixPAD.showAbout();
+		} else {
+			System.out.println("iXPAD : No action found for \"" + e.getActionCommand() + "\"");
 		}
 	}
 	

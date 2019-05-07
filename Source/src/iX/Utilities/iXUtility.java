@@ -25,6 +25,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -115,8 +120,12 @@ public class iXUtility {
 	}
 
 	public boolean saveToFile(String text, String filePath) {
+		return saveToFile(text, filePath, false);
+	}
+	
+	public boolean saveToFile(String text, String filePath, boolean append) {
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, append));
 			bw.write(text);
 			bw.close();
 			return true; 
@@ -125,6 +134,16 @@ public class iXUtility {
 		}
 		
 		return false;
+	}
+	
+	public static String convertToDateText(Date date, String format) {
+		String given = (new SimpleDateFormat(format).format(date)).toString();
+
+	    if (LocalDate.now().format(DateTimeFormatter.ofPattern(format)) == given) {
+	        return "Today";
+	    } else {
+	        return new SimpleDateFormat("MMMM dd").format(date).toString();
+	    }
 	}
 	
 }

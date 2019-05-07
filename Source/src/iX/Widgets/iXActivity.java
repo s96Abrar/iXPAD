@@ -20,9 +20,12 @@
 package iX.Widgets;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,11 +33,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.TreeMap;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
+import iX.Utilities.iXUtility;
 
 public class iXActivity extends JFrame implements ListSelectionListener {
 	/**
@@ -44,96 +60,188 @@ public class iXActivity extends JFrame implements ListSelectionListener {
 
 	public static final String activityFile = System.getProperty("user.home") + "/iXPADActivity.txt";
 
+	private Component parent;
+	private JPanel buttonPanel;
+	private JButton btnClearActivity;
+	private iXTree treeActivity;
+
+	iXUtility ixUtil;
 	Container frameContainer;
 	JList<String> recentList;
 	
-	public iXActivity() {
-		// Load the last activity
-		System.out.println("Recent Activity Initializing...");
+	public iXActivity(Component parent) {
+		if (parent == null) {
+			System.out.println("iXPAD : Recent activity parent cannot be null");
+		}
 		
-		setupUi();
-		loadActivity();
+		this.parent = parent;
+		setupUI();
+		
+//		loadActivity();
 	}
 	
-	private void setupUi() {
+	private void setupUI() {
+		// Set frame properties
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setBounds(150,50,1060,640);
-		this.setTitle("iXPAD - Recent Activity");
+		this.setMinimumSize(new Dimension(600, 600));
+		this.setTitle("iXPAD - Activity");
+		this.setLocationRelativeTo(parent); // Place the frame to the center of the parent.
+		// ====================
+        
+		ixUtil = new iXUtility();
 		
-		// center the frame on the monitor
-        this.setLocationRelativeTo(null);
-		
-		frameContainer = this.getContentPane();
-		frameContainer.setLayout(new BorderLayout(2, 2));
-		
-		recentList = new JList<String>();
-		frameContainer.add(recentList, BorderLayout.CENTER);
-		recentList.addListSelectionListener(this);
+        btnClearActivity = new JButton("Clear Activity");  
+        btnClearActivity.addActionListener( (l) -> {
+        	clearActivity();
+        });
+        buttonPanel = new JPanel();
+        treeActivity = new iXTree(activityFile, "Activity");
+        treeActivity.expandNode(treeActivity.getRootName());
+        
+        JScrollPane treeScroll = new JScrollPane();
+        treeScroll.setViewportView(treeActivity);
+        
+        // TODO tree.putClientProperty("JTree.lineStyle", "Horizontal");
+        
+		BoxLayout buttonPanelLayout = new BoxLayout(buttonPanel, BoxLayout.X_AXIS);
+		BorderLayout mainLayout = new BorderLayout();		
+        
+        buttonPanel.setLayout(buttonPanelLayout);
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(btnClearActivity);        
+        
+        this.setLayout(mainLayout);
+        this.add(buttonPanel, BorderLayout.PAGE_START);
+        this.add(treeScroll, BorderLayout.CENTER);
 	}
 	
 	private void loadActivity() {
-		ArrayList<Date> dateTime = new ArrayList<Date>();
-		ArrayList<String> fileName = new ArrayList<String>();
+
+		Hashtable<Date, String> act = new Hashtable<>();
+		TreeMap<Date, String> sorted = new TreeMap<>( 	// Sorting on date time by descending order
+													new Comparator<Date>() {
+														public int compare(Date obj1, Date obj2) {
+															if (obj1 == null || obj2 == null)
+														        return 0;
+															
+															return obj2.compareTo(obj1);// Sort in descending order
+														}
+													});
 		
-		BufferedReader br;
+		BufferedReader bbr;
 		try {
-			br = new BufferedReader(new FileReader(activityFile));
-			String currentLine = "";
-			while ((currentLine = br.readLine()) != null) {
+			bbr = new BufferedReader(new FileReader(activityFile));
+			String currentLine = null;
+			while ((currentLine = bbr.readLine()) != null) {
 				String[] tList = currentLine.split("\t\t\t");
 				if (tList.length > 1) {
-					//System.out.println(new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").parse(tList[0]));
-					//System.out.println(tList[1]);
 					try {
-						dateTime.add( new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").parse(tList[0]) );
-						fileName.add(tList[1]);
-					} catch (Exception ex){
-						System.out.println(tList[0]);
-					}					
+						Date key = new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").parse(tList[0]);
+						String value = (tList[1]);
+						act.put(key, value);
+					} catch (Exception e) {
+						
+					}
 				}
-			}		
-			br.close();
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		ArrayList<Date> tdt = new ArrayList<Date>( dateTime );
-		
-		// Sorting on date time by descending order
-		Collections.sort(dateTime, new Comparator<Date>() {
-
-			@Override
-			public int compare(Date obj1, Date obj2) {
-				if (obj1 == null || obj2 == null)
-			        return 0;
-				
-			    return obj2.compareTo(obj1);
 			}
-		});
-		
-		ArrayList<String> list = new ArrayList<String>();
-		for (Date d : dateTime) {
-			int index = tdt.indexOf(d);
-			 list.add(fileName.get(index));
+		} catch (Exception e) {
+			
 		}
 		
-		String[] ts = new String[list.size()];
-		ts = list.toArray(ts);
 		
-		recentList.setListData(ts);
+//		ArrayList<Date> dateTime = new ArrayList<Date>();
+//		ArrayList<String> fileName = new ArrayList<String>();
+//		
+//		BufferedReader br;
+//		try {
+//			br = new BufferedReader(new FileReader(activityFile));
+//			String currentLine = "";
+//			while ((currentLine = br.readLine()) != null) {
+//				String[] tList = currentLine.split("\t\t\t");
+//				if (tList.length > 1) {
+//					//System.out.println(new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").parse(tList[0]));
+//					//System.out.println(tList[1]);
+//					try {
+//						dateTime.add( new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").parse(tList[0]) );
+//						fileName.add(tList[1]);
+//					} catch (Exception ex){
+//						System.out.println(tList[0]);
+//					}					
+//				}
+//			}		
+//			br.close();
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		ArrayList<Date> tdt = new ArrayList<Date>( dateTime );
+//		
+//		// Sorting on date time by descending order
+//		Collections.sort(datetime, new Comparator<Date>() {
+//
+//			@Override
+//			public int compare(Date obj1, Date obj2) {
+//				if (obj1 == null || obj2 == null)
+//			        return 0;
+//				
+//			    return obj2.compareTo(obj1);
+//			}
+//		});
+//		
+//		ArrayList<String> list = new ArrayList<String>();
+//		for (Date d : dateTime) {
+//			int index = tdt.indexOf(d);
+//			 list.add(fileName.get(index));
+//		}
+//		
+//		String[] ts = new String[list.size()];
+//		ts = list.toArray(ts);
+		
+		sorted.putAll(act);
+		act.putAll(sorted);
+		
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+		for (Date key : act.keySet()) {
+			String[] dateTime = (new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").format(key)).toString().split(" ");
+			DefaultMutableTreeNode date = new DefaultMutableTreeNode(dateTime[1]);
+			DefaultMutableTreeNode time = new DefaultMutableTreeNode(dateTime[0]);
+			date.add(time);
+			root.add(date);
+			
+		}
+//		treeActivity.getModel().;
+		sorted.clear();
+//		treeActivity = new JTree(act);
 	}
 	
-	public static void saveActivity(String lastFilePath) {
+	public void saveActivity(String lastFilePath) {
 		String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH.mm.ss.SSS dd.MM.yyyy")) + "\t\t\t" + lastFilePath;
+		ixUtil.saveToFile(str + "\n", activityFile, true);
 //		Utilities.appendStrToFile(str + "\n", activityFile);
 	}
 
+	private void clearActivity() {
+		if (treeActivity.isEmpty() == false) {
+			ixUtil.saveToFile("", activityFile);
+			treeActivity.clearAll();
+		}
+	}
+	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 //		MainFrame f = new MainFrame();
 //		f.setVisible(true);
 //		f.openFile(recentList.getSelectedValue());
+	}
+	
+	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch(Exception e) {
+			
+		}
+		iXActivity test = new iXActivity(null);
+		test.setVisible(true);
 	}
 }
