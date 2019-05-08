@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -221,6 +222,7 @@ public class iXPAD extends JFrame {
 		bgc.weighty = 0.9;
 		buttonPanel.add(Box.createVerticalGlue(), bgc);
 		// ===================
+		
 		// iXTabPane
 		ixTabPane = new iXTabPane();
 		createTab();		
@@ -251,6 +253,10 @@ public class iXPAD extends JFrame {
 		}
 	}
 	
+	public void paintComponents(Graphics g) {
+		super.paintComponents(g);
+		g.drawImage((ixUtil.getImageResource("btnAbout.png")).getImage(), 0, 0, this);
+	}
 	public void showPinView() { 
 		iXPin ixPin = new iXPin(this);
 		ixPin.setVisible(true);

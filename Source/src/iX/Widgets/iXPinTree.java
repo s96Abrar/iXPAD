@@ -47,7 +47,7 @@ public class iXPinTree extends JTree {
 
 		
 		// Sorting on date time by descending order
-		Comparator<String> dateSort = new Comparator<>() {
+		Comparator<String> dateSort = new Comparator<String>() {
 			public int compare(String obj1, String obj2) {
 				if (obj1 == null || obj2 == null)
 			        return 0;

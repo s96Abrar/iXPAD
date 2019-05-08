@@ -84,7 +84,8 @@ public class iXEditor extends JTextPane implements DocumentListener {
 	public iXEditor(Component parentParent) {
 		// Initialize variables
 		textEditor = this;
-		ixPAD = (iXPAD) parentParent;
+		if (parentParent != null) 
+			ixPAD = (iXPAD) parentParent;
 		ixUtil = new iXUtility();
 		ixEditorUndoManage = new UndoManager();
 		

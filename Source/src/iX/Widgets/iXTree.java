@@ -45,7 +45,7 @@ public class iXTree extends JTree {
 
 		
 		// Sorting on date time by descending order
-		Comparator<Date> dateSort = new Comparator<>() {
+		Comparator<Date> dateSort = new Comparator<Date>() {
 			public int compare(Date obj1, Date obj2) {
 				if (obj1 == null || obj2 == null)
 			        return 0;

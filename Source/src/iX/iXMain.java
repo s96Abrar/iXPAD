@@ -29,20 +29,23 @@ public class iXMain {
 	public static void main(String[] args) {
 		try {
 			String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+			String windows2 = "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
 			String linuxGTK = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
 			
 			String custom = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
 			
 			String osName = System.getProperty("os.name");
 			System.out.println(osName);
+			String pathName = System.getProperty("user.home");
+			System.out.println(pathName);
 			
 			if (osName.equals("Linux")) {
 				System.out.println(osName + linuxGTK);
 //				UIManager.setLookAndFeel(linuxGTK);
 			} else {
-//				UIManager.setLookAndFeel(windows);
+				UIManager.setLookAndFeel(windows);
 			}
-//			UIManager.setLookAndFeel(custom);
+			UIManager.setLookAndFeel(custom);
 //			UIManager.setLookAndFeel(new InfoNodeLookAndFeel());
 			for (LookAndFeelInfo f : UIManager.getInstalledLookAndFeels()) {
 				System.out.println(f.toString());
