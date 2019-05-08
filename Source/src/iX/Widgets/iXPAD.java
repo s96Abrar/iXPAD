@@ -35,6 +35,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -97,6 +98,7 @@ public class iXPAD extends JFrame {
 		// Initializing UI
 		setupUI();
 		// ==============
+		
 	}
 	
 	private void setupUI() {
@@ -170,9 +172,9 @@ public class iXPAD extends JFrame {
 				continue;
 			}
 			
-			btn.setUI(new BasicButtonUI());
-			btn.setContentAreaFilled(false);
-			btn.setRolloverEnabled(true);	
+//			btn.setUI(new BasicButtonUI());
+//			btn.setContentAreaFilled(false);
+//			btn.setRolloverEnabled(true);	
 			
 			String btnText = btn.getText().replaceAll("\\b \\b", "");
 			btn.setIcon(ixUtil.getImageResource("btn" + btnText + ".png"));

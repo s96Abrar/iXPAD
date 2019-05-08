@@ -22,7 +22,7 @@ package iX;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import iX.Widgets.iXPAD; 
+import iX.Widgets.iXPAD;
 
 public class iXMain {
 
@@ -31,16 +31,19 @@ public class iXMain {
 			String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
 			String linuxGTK = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
 			
+			String custom = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
+			
 			String osName = System.getProperty("os.name");
 			System.out.println(osName);
 			
 			if (osName.equals("Linux")) {
 				System.out.println(osName + linuxGTK);
-				UIManager.setLookAndFeel(linuxGTK);
+//				UIManager.setLookAndFeel(linuxGTK);
 			} else {
-				UIManager.setLookAndFeel(windows);
+//				UIManager.setLookAndFeel(windows);
 			}
-			
+//			UIManager.setLookAndFeel(custom);
+//			UIManager.setLookAndFeel(new InfoNodeLookAndFeel());
 			for (LookAndFeelInfo f : UIManager.getInstalledLookAndFeels()) {
 				System.out.println(f.toString());
 			}

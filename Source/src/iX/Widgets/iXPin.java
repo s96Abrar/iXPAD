@@ -26,16 +26,16 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.JTree;
 
-public class iXPin extends JFrame {
+public class iXPin extends JDialog {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
+	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
 	
 	private Component parent;
 	private JPanel buttonPanel;
@@ -48,12 +48,13 @@ public class iXPin extends JFrame {
 		}
 		
 		this.parent = parent;
+		setModal(true);
 		setupUI();
 	}
 	
 	private void setupUI() {
 		// Set frame properties
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setMinimumSize(new Dimension(600, 600));
 		this.setTitle("iXPAD - Pin View");
 		this.setLocationRelativeTo(parent); // Place the frame to the center of the parent.

@@ -25,12 +25,9 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Hashtable;
@@ -39,20 +36,18 @@ import java.util.TreeMap;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 import iX.Utilities.iXUtility;
 
-public class iXActivity extends JFrame implements ListSelectionListener {
+public class iXActivity extends JDialog implements ListSelectionListener {
 	/**
 	 * 
 	 */
@@ -75,6 +70,7 @@ public class iXActivity extends JFrame implements ListSelectionListener {
 		}
 		
 		this.parent = parent;
+		setModal(true);
 		setupUI();
 		
 //		loadActivity();
@@ -82,7 +78,7 @@ public class iXActivity extends JFrame implements ListSelectionListener {
 	
 	private void setupUI() {
 		// Set frame properties
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setMinimumSize(new Dimension(600, 600));
 		this.setTitle("iXPAD - Activity");
 		this.setLocationRelativeTo(parent); // Place the frame to the center of the parent.
