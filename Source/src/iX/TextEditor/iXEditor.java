@@ -20,6 +20,7 @@
 package iX.TextEditor;
 
 import java.awt.Color;
+
 import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.Font;
@@ -45,6 +46,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
+import javax.swing.text.Highlighter.HighlightPainter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -54,6 +56,7 @@ import javax.swing.undo.UndoManager;
 import iX.Utilities.iXUtility;
 import iX.Widgets.iXPAD;
 import iX.Widgets.iXSearch;
+import iX.SpellCheck.WaveHighlighter;
 
 /**
  * @author abrar
@@ -79,6 +82,22 @@ public class iXEditor extends JTextPane implements DocumentListener {
 	private iXPAD ixPAD;
 	
 	private String act;
+	
+	// TODO Move pattern to new class
+	String commentPattern = "//.*";
+	String comment2Pattern = "///.*";
+	String defaultPattern = ".*";
+	String stringPattern = "\"[^\"\\\\]*(\\\\(.|\\n)[^\"\\\\]*)*\"|'[^'\\\\]*(\\\\(.|\\n)[^'\\\\]*)*'";
+	String multiLineCommentPattern = "/\\*(.|[\\r\\n])*?\\*/";
+	String className = "\\b[A-Z][a-z]*([A-Z][a-z]*)*\\b";
+//	String numbers = "\b[0-9]+\\.?[0-9]*\b";
+	String numbers = "\\b\\d+[\\.]?\\d*([eE]\\-?\\d+)?[lLdDfF]?\\b|\\b0x[a-fA-F\\d]+\\b";
+	String functionName = "(\\w+\\()+([^\\)]*\\)+)";
+	String preprocessor = ".*#[^\n]*";
+	String keywords = "";
+	
+	HighlightPainter painter;
+	
 	// ===================
 
 	public iXEditor(Component parentParent) {
@@ -95,6 +114,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		// Initialize UI
 		setupUI();
 
+		painter = new WaveHighlighter(Color.RED);
 		// TODO Remove unused code
 //		getStyledDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
 //		setEditorKit(new StyledEditorKit());		
@@ -115,6 +135,23 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		
 		// Add shortcut key 
 		addKeyboardShortcut();
+		
+		// Get C++ keywords
+		String[] st = {"char", "class", "const", "double", "enum", "explicit",
+				"extern", "float", "friend", "inline", "int", "long", "namespace",
+				"operator", "private", "protected", "public", "short", "signals", "signed",
+				"slots", "static", "struct", "template", "typedef", "typename", "union", 
+				"using","unsigned", "virtual", "void", "volatile", "true", "false", "bool",
+				"and", "or", "not", "for", "while", "switch", "case", "continue", "break", "if", "else", "return", "exit"};
+
+		for (String s : st) {
+			String.join("|", keywords, "\\b" + s + "\\b");
+		}
+		
+		System.out.println( "Why" + keywords);
+		
+
+		
 	}
 	
 	private void addKeyboardShortcut() {		
@@ -424,13 +461,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 //		getDocument().addUndoableEditListener(ixUndoListener);
 	}
 	
-	// TODO Move pattern to new class
-	String commentPattern = "//.*";
-	String comment2Pattern = "///.*";
-	String defaultPattern = ".*";
-	String stringPattern = "\"[^\"\\\\]*(\\\\(.|\\n)[^\"\\\\]*)*\"|'[^'\\\\]*(\\\\(.|\\n)[^'\\\\]*)*'";
-	String multiLineCommentPattern = "/\\*(.|[\\r\\n])*?\\*/";
-	
+
 	class SyntaxRule {
 		String rule;
 		String startRule;
@@ -451,6 +482,10 @@ public class iXEditor extends JTextPane implements DocumentListener {
 								 new SyntaxRule(comment2Pattern, null, null, Color.blue, Font.BOLD + Font.ITALIC)}; 
 	
 	private void syntaxHighlight() {
+
+		String[] syntaxs = {defaultPattern, commentPattern, /*comment2Pattern,*/ multiLineCommentPattern, stringPattern,
+							className, numbers, functionName, preprocessor, keywords}; 
+		
     	Runnable syntaxHighlight = new Runnable() {
             public void run() {
             	Element root = getDocument().getDefaultRootElement();
@@ -593,72 +628,94 @@ public class iXEditor extends JTextPane implements DocumentListener {
             	
             	
             	
-            	{ // Default string
-	        		//Pattern pattern = Pattern.compile(defaultPattern);				
-					//Matcher match = pattern.matcher(getText());
-					
-					int mStart = -1;
-					int mEnd = -1;
-					//if (match.find()) {
-						mStart = 0;//match.start();
-						mEnd = getText().length()/* - 1*/;//match.end();
-					//}
-					
-					if (mStart > -1) {
-						updateSyntaxColor(mStart/*+start*/, mEnd/*-mStart*/, Color.BLACK, Font.PLAIN, "DefaultString");
-					}
-            	}
+//            	{ // Default string
+//	        		//Pattern pattern = Pattern.compile(defaultPattern);				
+//					//Matcher match = pattern.matcher(getText());
+//					
+//					int mStart = -1;
+//					int mEnd = -1;
+//					//if (match.find()) {
+//						mStart = 0;//match.start();
+//						mEnd = getText().length()/* - 1*/;//match.end();
+//					//}
+//					
+//					if (mStart > -1) {
+//						updateSyntaxColor(mStart/*+start*/, mEnd/*-mStart*/, Color.BLACK, Font.PLAIN, "DefaultString");
+//					}
+//            	}
+//            	
+//            	{ // Comment "//"
+//	            	Pattern pattern = Pattern.compile(commentPattern);				
+//					Matcher match = pattern.matcher(textStr);
+//					
+//					int mStart = -1;
+//					int mEnd = -1;
+//					if (match.find()) {
+//						mStart = match.start();
+//						mEnd = match.end();
+//					}
+//					
+//					if (mStart > -1) {
+//						updateSyntaxColor(mStart+start, mEnd-mStart, Color.green, Font.ITALIC, "Comment//");
+//					}
+//            	}
+//            	
+//            	{ // Comment "///"
+//            		Pattern pattern = Pattern.compile(comment2Pattern);				
+//    				Matcher match = pattern.matcher(textStr);
+//    				
+//    				int mStart = -1;
+//    				int mEnd = -1;
+//    				if (match.find()) {
+//    					mStart = match.start();
+//    					mEnd = match.end();
+//    				}
+//    				
+//    				if (mStart > -1) {
+//    					updateSyntaxColor(mStart+start, mEnd-mStart, Color.green, Font.BOLD + Font.ITALIC, "Comment///");
+//    				}
+//            	}
+//            	
+//            	{ // Multiline Comment
+//            		Pattern pattern = Pattern.compile(multiLineCommentPattern);
+////            		System.out.println(textStr.matches("/\\*"));
+//            		//if (textStr.matches("/\\*") || textStr.matches("\\*/")) {
+//            			// Need to check whole text string for multiline comment
+//        				Matcher match = pattern.matcher(getText());
+//        				
+//        				int mStart = -1;
+//        				int mEnd = -1;
+//        				if (match.find()) {
+//        					mStart = match.start();
+//        					mEnd = match.end();
+//        				}
+//        				
+//        				if (mStart > -1) {
+//        					updateSyntaxColor(mStart, mEnd-mStart, Color.green, Font.ITALIC, "Multiline");
+//        				}
+//            		//}
+//            	}
             	
-            	{ // Comment "//"
-	            	Pattern pattern = Pattern.compile(commentPattern);				
-					Matcher match = pattern.matcher(textStr);
+            	int i = 0;
+            	for (String s : syntaxs) {
+	            	Pattern pattern = Pattern.compile(s);				
+					Matcher match = pattern.matcher(getText());
 					
-					int mStart = -1;
-					int mEnd = -1;
-					if (match.find()) {
-						mStart = match.start();
-						mEnd = match.end();
-					}
+//					int mStart = -1;
+//					int mEnd = -1;
+//					if (match.find()) {
+//						mStart = match.start();
+//						mEnd = match.end();
+//					}
 					
-					if (mStart > -1) {
-						updateSyntaxColor(mStart+start, mEnd-mStart, Color.green, Font.ITALIC, "Comment//");
+					while (match.find()) {
+						updateSyntaxColor(match.start(), match.end() - match.start(), colors[i] ,Font.PLAIN, "Random");
 					}
-            	}
-            	
-            	{ // Comment "///"
-            		Pattern pattern = Pattern.compile(comment2Pattern);				
-    				Matcher match = pattern.matcher(textStr);
-    				
-    				int mStart = -1;
-    				int mEnd = -1;
-    				if (match.find()) {
-    					mStart = match.start();
-    					mEnd = match.end();
-    				}
-    				
-    				if (mStart > -1) {
-    					updateSyntaxColor(mStart+start, mEnd-mStart, Color.green, Font.BOLD + Font.ITALIC, "Comment///");
-    				}
-            	}
-            	
-            	{ // Multiline Comment
-            		Pattern pattern = Pattern.compile(multiLineCommentPattern);
-//            		System.out.println(textStr.matches("/\\*"));
-            		//if (textStr.matches("/\\*") || textStr.matches("\\*/")) {
-            			// Need to check whole text string for multiline comment
-        				Matcher match = pattern.matcher(getText());
-        				
-        				int mStart = -1;
-        				int mEnd = -1;
-        				if (match.find()) {
-        					mStart = match.start();
-        					mEnd = match.end();
-        				}
-        				
-        				if (mStart > -1) {
-        					updateSyntaxColor(mStart, mEnd-mStart, Color.green, Font.ITALIC, "Multiline");
-        				}
-            		//}
+//					
+					i++;
+//					if (mStart > -1) {
+//						updateSyntaxColor(mStart+start, mEnd-mStart, Color.green, Font.ITALIC, "Comment//");
+//					}
             	}
             	
             }
@@ -666,6 +723,10 @@ public class iXEditor extends JTextPane implements DocumentListener {
         SwingUtilities.invokeLater(syntaxHighlight);	
     }
 
+	Color[] colors = {Color.BLACK, Color.decode("#008000"),Color.decode("#008000"),Color.decode("#008000"),
+			Color.decode("#800080"), Color.decode("#808080"), Color.decode("#008080"), Color.decode("#808000"), Color.decode("#0000ff")
+	};
+			
 }
 
 //class WrapEditorKit extends StyledEditorKit {

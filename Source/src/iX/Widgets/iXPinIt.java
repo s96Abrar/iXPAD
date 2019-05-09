@@ -59,16 +59,15 @@ public class iXPinIt extends JDialog {
 		chkOldSection = new JCheckBox("Add to existing section");
 		sectionList = new JComboBox<>(); 
 		
-		Vector<String> ll = new Vector<>();
+		
 		ArrayList<String> list = new ArrayList<>();
 		BufferedReader br;
 		try {
-			int i = 0;
 			br = new BufferedReader(new FileReader(pinSectionFile));
 			String currentLine = "";
 			while ((currentLine = br.readLine()) != null) {
 				System.out.println("Line " + currentLine);
-				ll.add(currentLine);
+				list.add(currentLine);
 			}
 		} catch (IOException e) {
 			System.out.println("iXPAD : File reading problem.\n" + e.getMessage());
@@ -77,11 +76,13 @@ public class iXPinIt extends JDialog {
 		}
 		System.out.println("Sr " + list.toString());
 		
-		String[] jk = null; jk = ll.toArray(jk);
 //		jk = (String[]) list.toArray();
-		if (jk != null) {
-			DefaultComboBoxModel<String> d = new DefaultComboBoxModel<>(jk);
-			sectionList.setModel(d);
+//		if (jk != null) {
+//			DefaultComboBoxModel<String> d = new DefaultComboBoxModel<>(jk);
+//			sectionList.setModel(d);
+//		}
+		for(String s : list) {
+			sectionList.addItem(s);
 		}
 		chkNewSection = new JCheckBox("Add to new section ");
 		tfNewSection = new JTextField();

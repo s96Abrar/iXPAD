@@ -101,7 +101,7 @@ public class iXUtility {
 	}
 	
 	public String openFromFile(String filePath) {
-		String text = null;
+		String text = "";
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(filePath));
