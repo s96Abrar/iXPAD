@@ -20,7 +20,6 @@
 package iX.Windows;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -36,11 +35,8 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import javax.swing.plaf.basic.BasicButtonUI;
-
 import iX.Utilities.iXUtility;
 import iX.Widgets.iXTabPane;
 import iX.Listener.iXButtonActionListener;
