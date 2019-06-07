@@ -63,19 +63,19 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 	iXUtility ixUtil;
 	Container frameContainer;
 	JList<String> recentList;
-	
+
 	public iXActivity(Component parent) {
 		if (parent == null) {
 			System.out.println("iXPAD : Recent activity parent cannot be null");
 		}
-		
+
 		this.parent = parent;
 		setModal(true);
 		setupUI();
-		
+
 //		loadActivity();
 	}
-	
+
 	private void setupUI() {
 		// Set frame properties
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -83,47 +83,47 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 		this.setTitle("iXPAD - Activity");
 		this.setLocationRelativeTo(parent); // Place the frame to the center of the parent.
 		// ====================
-        
+
 		ixUtil = new iXUtility();
-		
-        btnClearActivity = new JButton("Clear Activity");  
-        btnClearActivity.addActionListener( (l) -> {
-        	clearActivity();
-        });
-        buttonPanel = new JPanel();
-        treeActivity = new iXTree(iXVariables.iXPADActivityFile, "Activity");
-        treeActivity.expandNode(treeActivity.getRootName());
-        
-        JScrollPane treeScroll = new JScrollPane();
-        treeScroll.setViewportView(treeActivity);
-        
-        // TODO tree.putClientProperty("JTree.lineStyle", "Horizontal");
-        
+
+		btnClearActivity = new JButton("Clear Activity");
+		btnClearActivity.addActionListener((l) -> {
+			clearActivity();
+		});
+		buttonPanel = new JPanel();
+		treeActivity = new iXTree(iXVariables.iXPADActivityFile, "Activity");
+		treeActivity.expandNode(treeActivity.getRootName());
+
+		JScrollPane treeScroll = new JScrollPane();
+		treeScroll.setViewportView(treeActivity);
+
+		// TODO tree.putClientProperty("JTree.lineStyle", "Horizontal");
+
 		BoxLayout buttonPanelLayout = new BoxLayout(buttonPanel, BoxLayout.X_AXIS);
-		BorderLayout mainLayout = new BorderLayout();		
-        
-        buttonPanel.setLayout(buttonPanelLayout);
-        buttonPanel.add(Box.createHorizontalGlue());
-        buttonPanel.add(btnClearActivity);        
-        
-        this.setLayout(mainLayout);
-        this.add(buttonPanel, BorderLayout.PAGE_START);
-        this.add(treeScroll, BorderLayout.CENTER);
+		BorderLayout mainLayout = new BorderLayout();
+
+		buttonPanel.setLayout(buttonPanelLayout);
+		buttonPanel.add(Box.createHorizontalGlue());
+		buttonPanel.add(btnClearActivity);
+
+		this.setLayout(mainLayout);
+		this.add(buttonPanel, BorderLayout.PAGE_START);
+		this.add(treeScroll, BorderLayout.CENTER);
 	}
-	
+
 	private void loadActivity() {
 
 		Hashtable<Date, String> act = new Hashtable<>();
-		TreeMap<Date, String> sorted = new TreeMap<>( 	// Sorting on date time by descending order
-													new Comparator<Date>() {
-														public int compare(Date obj1, Date obj2) {
-															if (obj1 == null || obj2 == null)
-														        return 0;
-															
-															return obj2.compareTo(obj1);// Sort in descending order
-														}
-													});
-		
+		TreeMap<Date, String> sorted = new TreeMap<>( // Sorting on date time by descending order
+				new Comparator<Date>() {
+					public int compare(Date obj1, Date obj2) {
+						if (obj1 == null || obj2 == null)
+							return 0;
+
+						return obj2.compareTo(obj1);// Sort in descending order
+					}
+				});
+
 		BufferedReader bbr;
 		try {
 			bbr = new BufferedReader(new FileReader(iXVariables.iXPADActivityFile));
@@ -136,15 +136,14 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 						String value = (tList[1]);
 						act.put(key, value);
 					} catch (Exception e) {
-						
+
 					}
 				}
 			}
 		} catch (Exception e) {
-			
+
 		}
-		
-		
+
 //		ArrayList<Date> dateTime = new ArrayList<Date>();
 //		ArrayList<String> fileName = new ArrayList<String>();
 //		
@@ -193,10 +192,10 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 //		
 //		String[] ts = new String[list.size()];
 //		ts = list.toArray(ts);
-		
+
 		sorted.putAll(act);
 		act.putAll(sorted);
-		
+
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
 		for (Date key : act.keySet()) {
 			String[] dateTime = (new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").format(key)).toString().split(" ");
@@ -204,15 +203,16 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 			DefaultMutableTreeNode time = new DefaultMutableTreeNode(dateTime[0]);
 			date.add(time);
 			root.add(date);
-			
+
 		}
 //		treeActivity.getModel().;
 		sorted.clear();
 //		treeActivity = new JTree(act);
 	}
-	
+
 	public void saveActivity(String lastFilePath) {
-		String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH.mm.ss.SSS dd.MM.yyyy")) + "\t\t\t" + lastFilePath;
+		String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH.mm.ss.SSS dd.MM.yyyy")) + "\t\t\t"
+				+ lastFilePath;
 		ixUtil.saveToFile(str + "\n", iXVariables.iXPADActivityFile, true);
 //		Utilities.appendStrToFile(str + "\n", activityFile);
 	}
@@ -223,19 +223,19 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 			treeActivity.clearAll();
 		}
 	}
-	
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 //		MainFrame f = new MainFrame();
 //		f.setVisible(true);
 //		f.openFile(recentList.getSelectedValue());
 	}
-	
+
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		} catch(Exception e) {
-			
+		} catch (Exception e) {
+
 		}
 		iXActivity test = new iXActivity(null);
 		test.setVisible(true);

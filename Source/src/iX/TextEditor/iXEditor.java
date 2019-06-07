@@ -63,11 +63,10 @@ import iX.SpellCheck.WaveHighlighter;
 public class iXEditor extends JTextPane implements DocumentListener {
 
 	/**
-	 * Default serial version id.
-	 * Used for removing warning. 
+	 * Default serial version id. Used for removing warning.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	// Declaring variables
 	private iXUtility ixUtil;
 	private iXEditorAbstractAction editorAction;
@@ -75,12 +74,12 @@ public class iXEditor extends JTextPane implements DocumentListener {
 	private iXEditorUndoableListener ixUndoListener;
 
 	private String workFilePath;
-	
+
 	private iXEditor textEditor;
 	private iXPAD ixPAD;
-	
+
 	private String act;
-	
+
 	// TODO Move pattern to new class
 	String commentPattern = "//.*";
 	String comment2Pattern = "///.*";
@@ -93,22 +92,22 @@ public class iXEditor extends JTextPane implements DocumentListener {
 	String functionName = "(\\w+\\()+([^\\)]*\\)+)";
 	String preprocessor = ".*#[^\n]*";
 	String keywords = "";
-	
+
 	HighlightPainter painter;
-	
+
 	// ===================
 
 	public iXEditor(Component parentParent) {
 		// Initialize variables
 		textEditor = this;
-		if (parentParent != null) 
+		if (parentParent != null)
 			ixPAD = (iXPAD) parentParent;
 		ixUtil = new iXUtility();
 		ixEditorUndoManage = new UndoManager();
-		
+
 		act = "Change";
 		// ====================
-		
+
 		// Initialize UI
 		setupUI();
 
@@ -121,7 +120,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 //		setEditorKit(e);
 //		this.setEditorKit(new WrapEditorKit());
 	}
-	
+
 	public String getWorkFilePath() {
 		return workFilePath;
 	}
@@ -130,32 +129,29 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		getDocument().addDocumentListener(this);
 		ixUndoListener = new iXEditorUndoableListener();
 		getDocument().addUndoableEditListener(ixUndoListener);
-		
-		// Add shortcut key 
+
+		// Add shortcut key
 		addKeyboardShortcut();
-		
+
 		// Get C++ keywords
-		String[] st = {"char", "class", "const", "double", "enum", "explicit",
-				"extern", "float", "friend", "inline", "int", "long", "namespace",
-				"operator", "private", "protected", "public", "short", "signals", "signed",
-				"slots", "static", "struct", "template", "typedef", "typename", "union", 
-				"using","unsigned", "virtual", "void", "volatile", "true", "false", "bool",
-				"and", "or", "not", "for", "while", "switch", "case", "continue", "break", "if", "else", "return", "exit"};
+		String[] st = { "char", "class", "const", "double", "enum", "explicit", "extern", "float", "friend", "inline",
+				"int", "long", "namespace", "operator", "private", "protected", "public", "short", "signals", "signed",
+				"slots", "static", "struct", "template", "typedef", "typename", "union", "using", "unsigned", "virtual",
+				"void", "volatile", "true", "false", "bool", "and", "or", "not", "for", "while", "switch", "case",
+				"continue", "break", "if", "else", "return", "exit" };
 
 		for (String s : st) {
 			String.join("|", keywords, "\\b" + s + "\\b");
 		}
-		
-		System.out.println( "Why" + keywords);
-		
 
-		
+		System.out.println("Why" + keywords);
+
 	}
-	
-	private void addKeyboardShortcut() {		
+
+	private void addKeyboardShortcut() {
 		String keyText = null;
 		int keyEvent = 0;
-		
+
 		for (int i = 0; i < 3; i++) {
 			if (i == 0) {
 				keyText = "UpperCase";
@@ -167,12 +163,12 @@ public class iXEditor extends JTextPane implements DocumentListener {
 				keyText = "TitleCase";
 				keyEvent = KeyEvent.VK_T;
 			}
-			
+
 			editorAction = new iXEditorAbstractAction(keyText);
 			ixUtil.addKeyShortcut(this, keyText, KeyStroke.getKeyStroke(keyEvent, ActionEvent.CTRL_MASK), editorAction);
 		}
 	}
-	
+
 	public void appendString(String str) {
 		try {
 			Document doc = getDocument();
@@ -181,7 +177,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void undo() {
 		try {
 			ixEditorUndoManage.undo();
@@ -190,7 +186,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		}
 		ixPAD.updateUndoRedo(canUndo(), canRedo());
 	}
-	
+
 	public void redo() {
 		try {
 			ixEditorUndoManage.redo();
@@ -199,15 +195,15 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		}
 		ixPAD.updateUndoRedo(canUndo(), canRedo());
 	}
-	
+
 	public void search() {
 		new iXSearch(this);
 	}
-	
+
 	private boolean canUndo() {
 		return ixEditorUndoManage.canUndo();
 	}
-	
+
 	private boolean canRedo() {
 		return ixEditorUndoManage.canRedo();
 	}
@@ -221,11 +217,11 @@ public class iXEditor extends JTextPane implements DocumentListener {
 			System.out.println("iXPAD : File not exists " + f.getAbsolutePath());
 		}
 	}
-	
+
 	public void saveFile() {
 		// TODO: check the work file path before saving it and move it to safe
 		String filePath = workFilePath;
-		
+
 		if (filePath == null) {
 			filePath = saveFileDialog();
 		} else {
@@ -236,7 +232,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 			ixUtil.saveToFile(getText(), filePath);
 		}
 	}
-	
+
 	public void saveAsFile() {
 		String filePath = saveFileDialog();
 		if (filePath != null) {
@@ -245,42 +241,41 @@ public class iXEditor extends JTextPane implements DocumentListener {
 			System.out.println("iXPAD : Null file path at save as.");
 		}
 	}
-	
+
 	private String openFileDialog() {
 		return fileDialog("Open File", FileDialog.LOAD);
 	}
-	
+
 	private String saveFileDialog() {
 		return fileDialog("Save File", FileDialog.SAVE);
 	}
-	
+
 	private String fileDialog(String title, int mode) {
 		String filePath = null;
-		
-		FileDialog fd = new FileDialog( new JFrame(), title, mode);
+
+		FileDialog fd = new FileDialog(new JFrame(), title, mode);
 		// TODO Move to variables class
 		fd.setDirectory(System.getProperty("user.home"));
 		fd.setFilenameFilter((dir, name) -> name.endsWith(".txt"));
 		fd.setVisible(true);
 		filePath = fd.getDirectory() + fd.getFile();
-		
+
 		return filePath;
 	}
-	
+
 	private class iXEditorAbstractAction extends AbstractAction {
 
 		/**
-		 * Default serial version id.
-		 * Used for removing warning. 
+		 * Default serial version id. Used for removing warning.
 		 */
 		private static final long serialVersionUID = 1L;
 
 		private String actionText;
-		
+
 		public iXEditorAbstractAction(String actText) {
 			actionText = actText;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (actionText == "UpperCase") {
@@ -291,9 +286,9 @@ public class iXEditor extends JTextPane implements DocumentListener {
 				textEditor.replaceSelection(toStrTitleCase(textEditor.getSelectedText()));
 			}
 		}
-		
+
 	}
-	
+
 	private class iXEditorUndoableListener implements UndoableEditListener {
 
 		@Override
@@ -303,9 +298,9 @@ public class iXEditor extends JTextPane implements DocumentListener {
 				ixPAD.updateUndoRedo(canUndo(), canRedo());
 			}
 		}
-		
+
 	}
-	
+
 	private class iXEditorDocumentListener implements DocumentListener {
 
 		// TODO Remove Unused
@@ -317,23 +312,23 @@ public class iXEditor extends JTextPane implements DocumentListener {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			
+
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
-	
+
 	// TODO Move to Utility class
 	public String toStrUpperCase(String str) {
 		if (str == null) {
 			return null;
 		}
-		
+
 		return str.toUpperCase();
 	}
 
@@ -342,40 +337,39 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		if (str == null) {
 			return null;
 		}
-		
+
 		return str.toLowerCase();
 	}
 
 	// TODO Move to Utility class
 	public String toStrTitleCase(String str) {
 		if (str.isEmpty()) {
-            return "";
-        }
- 
-        if (str.length() == 1) {
-            return str.toUpperCase();
-        }
- 
-        StringBuffer replaceStr = new StringBuffer(str.length());
- 
-        for (String line : str.split("\n")) {
-	        String[] tStr = line.split(" ");
-	        for (String s : tStr) {
-	        	if (s.length() > 1) {
-	        		replaceStr.append(s.substring(0, 1).toUpperCase())
-	        				  .append(s.substring(1).toLowerCase());
-	        	} else {
-	        		replaceStr.append(s.toUpperCase());
-	        	}
-	        	
-	        	replaceStr.append(" ");
-	        }
-	        replaceStr.append("\n");
-        }
-        
-        return new String(replaceStr).trim();
-    }
-	
+			return "";
+		}
+
+		if (str.length() == 1) {
+			return str.toUpperCase();
+		}
+
+		StringBuffer replaceStr = new StringBuffer(str.length());
+
+		for (String line : str.split("\n")) {
+			String[] tStr = line.split(" ");
+			for (String s : tStr) {
+				if (s.length() > 1) {
+					replaceStr.append(s.substring(0, 1).toUpperCase()).append(s.substring(1).toLowerCase());
+				} else {
+					replaceStr.append(s.toUpperCase());
+				}
+
+				replaceStr.append(" ");
+			}
+			replaceStr.append("\n");
+		}
+
+		return new String(replaceStr).trim();
+	}
+
 	public void changedUpdate(DocumentEvent e) {
 		// Event never called
 		// See JTextComponent documentation
@@ -392,48 +386,48 @@ public class iXEditor extends JTextPane implements DocumentListener {
 	private int getCurrentLineNumber(Element root) {
 		return (root.getElementIndex(getCaretPosition()) + 1);
 	}
-	
+
 	private Point getCurrentLineStartEndOffset(Element root) {
 		int start, end;
 		Element lineElement = root.getElement(getCurrentLineNumber(root) - 1);
 		start = lineElement.getStartOffset();
 		end = lineElement.getEndOffset();
-		
+
 		return new Point(start, end);
 	}
-	
+
 	private String getCurrentLineBlock(Element root) {
 		String textStr = null;
-		
+
 		Point p = getCurrentLineStartEndOffset(root);
-        int start = p.x;
-        int end = p.y;
-        
+		int start = p.x;
+		int end = p.y;
+
 		try {
 			textStr = getText(start, end - start);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("Text " + textStr);
-		
+
 		return textStr;
 	}
-	
-	private void updateSyntaxColor(int offset, int length, Color c, int style, String Operation){
+
+	private void updateSyntaxColor(int offset, int length, Color c, int style, String Operation) {
 //		getDocument().removeUndoableEditListener(ixUndoListener);
 		System.out.println("Offset " + offset + " length " + length);
-		
+
 		act = "color";
 		System.out.println(Operation + " " + offset + " " + length);
 		StyledDocument styledDoc = getStyledDocument();
 		StyleContext sc = StyleContext.getDefaultStyleContext();
-		
+
 		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
 		AttributeSet asetF = null;
-		AttributeSet asetF2 = null;		
-		
-		switch(style){
+		AttributeSet asetF2 = null;
+
+		switch (style) {
 		case Font.BOLD:
 			asetF = sc.addAttribute(aset, StyleConstants.Bold, true);
 			break;
@@ -447,18 +441,17 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		default:
 //			asetF = sc.addAttribute(aset, StyleConstants., true);
 		}
-		
+
 		if (asetF2 != null)
 			styledDoc.setCharacterAttributes(offset, length, asetF2, true);
 		else if (asetF != null)
 			styledDoc.setCharacterAttributes(offset, length, asetF, true);
 		else
 			styledDoc.setCharacterAttributes(offset, length, aset, true);
-		
+
 		act = "Change";
 //		getDocument().addUndoableEditListener(ixUndoListener);
 	}
-	
 
 	class SyntaxRule {
 		String rule;
@@ -466,6 +459,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		String endRule;
 		Color color;
 		int font;
+
 		SyntaxRule(String r, String sr, String er, Color c, int f) {
 			rule = r;
 			startRule = sr;
@@ -474,22 +468,22 @@ public class iXEditor extends JTextPane implements DocumentListener {
 			font = f;
 		}
 	}
-	
-	SyntaxRule[] syntax_rules = {new SyntaxRule(null, "/\\*", "\\*/", Color.red, Font.ITALIC),
-								 new SyntaxRule(commentPattern, null, null, Color.green, Font.ITALIC),
-								 new SyntaxRule(comment2Pattern, null, null, Color.blue, Font.BOLD + Font.ITALIC)}; 
-	
+
+	SyntaxRule[] syntax_rules = { new SyntaxRule(null, "/\\*", "\\*/", Color.red, Font.ITALIC),
+			new SyntaxRule(commentPattern, null, null, Color.green, Font.ITALIC),
+			new SyntaxRule(comment2Pattern, null, null, Color.blue, Font.BOLD + Font.ITALIC) };
+
 	private void syntaxHighlight() {
 
-		String[] syntaxs = {defaultPattern, commentPattern, /*comment2Pattern,*/ multiLineCommentPattern, stringPattern,
-							className, numbers, functionName, preprocessor, keywords}; 
-		
-    	Runnable syntaxHighlight = new Runnable() {
-            public void run() {
-            	Element root = getDocument().getDefaultRootElement();
-            	int start = getCurrentLineStartEndOffset(root).x;            	
-            	String textStr = getCurrentLineBlock(root);
-            	
+		String[] syntaxs = { defaultPattern, commentPattern, /* comment2Pattern, */ multiLineCommentPattern,
+				stringPattern, className, numbers, functionName, preprocessor, keywords };
+
+		Runnable syntaxHighlight = new Runnable() {
+			public void run() {
+				Element root = getDocument().getDefaultRootElement();
+				int start = getCurrentLineStartEndOffset(root).x;
+				String textStr = getCurrentLineBlock(root);
+
 //            	int start = 0;
 //            	int splitactive = Pattern.compile("/\\*").matcher(getText()).find() ? 0 : -1;
 //            	if (splitactive > syntax_rules.length - 1) {
@@ -570,62 +564,46 @@ public class iXEditor extends JTextPane implements DocumentListener {
 //                        index = patt.indexIn(text, index+len); //go to the next match
 //                    }
 //                }
-            	
-            	/*
-            	 * int start = 0;
-        int splitactive = previousBlockState();
-        if(splitactive>syntax.rules.length()-1){ splitactive = -1; } //just in case
-        while(start>=0 && start<=text.length()-1){
-            if(splitactive>=0){
-                //Find the end of the current rule
-                int end = syntax.rules[splitactive].endPattern.indexIn(text, start);
-                if(end==-1){                   //rule did not finish - apply to all
-                    if(start>0){ setFormat(start-1, text.length()-start+1, syntax.rules[splitactive].format); }
-                    else{ setFormat(start, text.length()-start, syntax.rules[splitactive].format); }
-                    break; //stop looking for more multi-line patterns
-                } else {
-                    //Found end point within the same line
-                    int len = end-start+syntax.rules[splitactive].endPattern.matchedLength();
-                    if(start>0){ start--; len++; } //need to include the first character as well
-                    setFormat(start, len , syntax.rules[splitactive].format);
-                    start+=len; //move pointer to the end of handled range
-                    splitactive = -1; //done with this rule
-                }
-            }            //end check for end match            //Look for the start of any new split rules
-            for(int i=0; i<syntax.rules.length() && splitactive<0; i++){
-                if(syntax.rules[i].startPattern.isEmpty()){ continue; }
-                int newstart = syntax.rules[i].startPattern.indexIn(text,start);
-                if(newstart>=start){
-                    splitactive = i;
-                    start = newstart+1;
-                    if(start>=text.length()-1){
-                        //Need to apply highlighting to this section too - start matches the end of the line
-                        setFormat(start-1, text.length()-start+1, syntax.rules[splitactive].format);
-                    }
-                }
-           }
-           if(splitactive<0){  break; } //no other rules found - go ahead and exit the loop
-        } //end scan over line length and multi-line formats
 
-        qDebug() << text;
-        setCurrentBlockState(splitactive);
-        //Do all the single-line patterns
-        for(int i=0; i<syntax.rules.length(); i++){
-            if(syntax.rules[i].pattern.isEmpty()){ continue; } //not a single-line rule
-            QRegExp patt(syntax.rules[i].pattern); //need a copy of the rule's pattern (will be changing it below)
-            int index = patt.indexIn(text);
-            if(splitactive>=0 || index<start){ continue; } //skip this one - falls within a multi-line pattern above
-            while(index>=0){
-                int len = patt.matchedLength();
-                if(format(index)==currentBlock().charFormat()){ setFormat(index, len, syntax.rules[i].format); } //only apply highlighting if not within a section already
-                index = patt.indexIn(text, index+len); //go to the next match
-            }
-        }//end loop over normal (single-line) patterns
+				/*
+				 * int start = 0; int splitactive = previousBlockState();
+				 * if(splitactive>syntax.rules.length()-1){ splitactive = -1; } //just in case
+				 * while(start>=0 && start<=text.length()-1){ if(splitactive>=0){ //Find the end
+				 * of the current rule int end =
+				 * syntax.rules[splitactive].endPattern.indexIn(text, start); if(end==-1){
+				 * //rule did not finish - apply to all if(start>0){ setFormat(start-1,
+				 * text.length()-start+1, syntax.rules[splitactive].format); } else{
+				 * setFormat(start, text.length()-start, syntax.rules[splitactive].format); }
+				 * break; //stop looking for more multi-line patterns } else { //Found end point
+				 * within the same line int len =
+				 * end-start+syntax.rules[splitactive].endPattern.matchedLength(); if(start>0){
+				 * start--; len++; } //need to include the first character as well
+				 * setFormat(start, len , syntax.rules[splitactive].format); start+=len; //move
+				 * pointer to the end of handled range splitactive = -1; //done with this rule }
+				 * } //end check for end match //Look for the start of any new split rules
+				 * for(int i=0; i<syntax.rules.length() && splitactive<0; i++){
+				 * if(syntax.rules[i].startPattern.isEmpty()){ continue; } int newstart =
+				 * syntax.rules[i].startPattern.indexIn(text,start); if(newstart>=start){
+				 * splitactive = i; start = newstart+1; if(start>=text.length()-1){ //Need to
+				 * apply highlighting to this section too - start matches the end of the line
+				 * setFormat(start-1, text.length()-start+1, syntax.rules[splitactive].format);
+				 * } } } if(splitactive<0){ break; } //no other rules found - go ahead and exit
+				 * the loop } //end scan over line length and multi-line formats
+				 * 
+				 * qDebug() << text; setCurrentBlockState(splitactive); //Do all the single-line
+				 * patterns for(int i=0; i<syntax.rules.length(); i++){
+				 * if(syntax.rules[i].pattern.isEmpty()){ continue; } //not a single-line rule
+				 * QRegExp patt(syntax.rules[i].pattern); //need a copy of the rule's pattern
+				 * (will be changing it below) int index = patt.indexIn(text); if(splitactive>=0
+				 * || index<start){ continue; } //skip this one - falls within a multi-line
+				 * pattern above while(index>=0){ int len = patt.matchedLength();
+				 * if(format(index)==currentBlock().charFormat()){ setFormat(index, len,
+				 * syntax.rules[i].format); } //only apply highlighting if not within a section
+				 * already index = patt.indexIn(text, index+len); //go to the next match }
+				 * }//end loop over normal (single-line) patterns
+				 * 
+				 */
 
-            	 */
-            	
-            	
-            	
 //            	{ // Default string
 //	        		//Pattern pattern = Pattern.compile(defaultPattern);				
 //					//Matcher match = pattern.matcher(getText());
@@ -693,38 +671,38 @@ public class iXEditor extends JTextPane implements DocumentListener {
 //        				}
 //            		//}
 //            	}
-            	
-            	int i = 0;
-            	for (String s : syntaxs) {
-	            	Pattern pattern = Pattern.compile(s);				
+
+				int i = 0;
+				for (String s : syntaxs) {
+					Pattern pattern = Pattern.compile(s);
 					Matcher match = pattern.matcher(getText());
-					
+
 //					int mStart = -1;
 //					int mEnd = -1;
 //					if (match.find()) {
 //						mStart = match.start();
 //						mEnd = match.end();
 //					}
-					
+
 					while (match.find()) {
-						updateSyntaxColor(match.start(), match.end() - match.start(), colors[i] ,Font.PLAIN, "Random");
+						updateSyntaxColor(match.start(), match.end() - match.start(), colors[i], Font.PLAIN, "Random");
 					}
 //					
 					i++;
 //					if (mStart > -1) {
 //						updateSyntaxColor(mStart+start, mEnd-mStart, Color.green, Font.ITALIC, "Comment//");
 //					}
-            	}
-            	
-            }
-        };       
-        SwingUtilities.invokeLater(syntaxHighlight);	
-    }
+				}
 
-	Color[] colors = {Color.BLACK, Color.decode("#008000"),Color.decode("#008000"),Color.decode("#008000"),
-			Color.decode("#800080"), Color.decode("#808080"), Color.decode("#008080"), Color.decode("#808000"), Color.decode("#0000ff")
-	};
-			
+			}
+		};
+		SwingUtilities.invokeLater(syntaxHighlight);
+	}
+
+	Color[] colors = { Color.BLACK, Color.decode("#008000"), Color.decode("#008000"), Color.decode("#008000"),
+			Color.decode("#800080"), Color.decode("#808080"), Color.decode("#008080"), Color.decode("#808000"),
+			Color.decode("#0000ff") };
+
 }
 
 //class WrapEditorKit extends StyledEditorKit {

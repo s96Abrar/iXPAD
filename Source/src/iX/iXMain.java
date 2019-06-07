@@ -33,10 +33,10 @@ public class iXMain {
 		try {
 			String osName = System.getProperty("os.name");
 			System.out.println("iXPAD : Info : OS Name - \"" + osName + "\"");
-						
+
 			String pathName = System.getProperty("user.home");
 			System.out.println("iXPAD : Info : User home directrory - \"" + pathName + "\"");
-			
+
 			ArrayList<String> list = new ArrayList<>();
 			for (LookAndFeelInfo f : UIManager.getInstalledLookAndFeels()) {
 				list.add(f.getClassName());
@@ -46,7 +46,7 @@ public class iXMain {
 			// TODO Move to settings
 			boolean custom = false;
 			boolean customLight = false;
-			
+
 			if (osName.equals("Linux")) {
 				if (list.contains(iXVariables.linuxGTKTheme)) {
 					UIManager.setLookAndFeel(iXVariables.linuxGTKTheme);
@@ -60,22 +60,22 @@ public class iXMain {
 					custom = true;
 				}
 			}
-			
+
 			if (custom == true) {
 				if (customLight == true) {
-					UIManager.setLookAndFeel(iXVariables.lightThemeNimbus); 
+					UIManager.setLookAndFeel(iXVariables.lightThemeNimbus);
 				} else {
 					// TODO
 					// Set the black theme
 					// Create a custom class
-					
+
 				}
 			}
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			System.out.println("iXPAD : Warning : Problem occurs in setting theme(" + e.getMessage() + ").");
 		}
-		
+
 		iXPAD ixpad = new iXPAD();
 		ixpad.setVisible(true);
 	}

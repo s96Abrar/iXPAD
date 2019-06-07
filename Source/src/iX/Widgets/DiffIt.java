@@ -23,9 +23,8 @@ import iX.Utilities.diff_match_patch.Diff;
 import iX.Utilities.diff_match_patch.Operation;
 import iX.Utilities.iXUtility;
 
-
 public class DiffIt extends JDialog {
-	
+
 	/**
 	 * 
 	 */
@@ -33,6 +32,7 @@ public class DiffIt extends JDialog {
 
 	private JTextPane editor;
 	private JTextArea lbl;
+
 	public DiffIt() {
 		// Set frame properties
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -40,7 +40,7 @@ public class DiffIt extends JDialog {
 		this.setTitle("iXPAD - Duplicity");
 		this.setLocationRelativeTo(null); // Place the frame to the center of the parent.
 		// ====================
-		        
+
 		editor = new JTextPane();
 		JScrollPane scroll = new JScrollPane();
 		scroll.setViewportView(editor);
@@ -48,14 +48,16 @@ public class DiffIt extends JDialog {
 		lbl.setEditable(false);
 		add(lbl, BorderLayout.PAGE_END);
 		add(scroll, BorderLayout.CENTER);
-		
+
 		iXUtility isp = new iXUtility();
-		
+
 //		String text1 = isp.openFromFile("F:\\iXPAD\\Source\\src\\iX\\Widgets\\iXPinTree.java");
 //		String text2 = isp.openFromFile("F:\\iXPAD\\Source\\src\\iX\\Widgets\\iXTree.java");
-		String text1 = isp.openFromFile("/home/abrar/Desktop/Varsity_project/Main/iXPAD/Source/src/iX/Widgets/iXPinTree.java");
-		String text2 = isp.openFromFile("/home/abrar/Desktop/Varsity_project/Main/iXPAD/Source/src/iX/Widgets/iXTree.java");
-		
+		String text1 = isp
+				.openFromFile("/home/abrar/Desktop/Varsity_project/Main/iXPAD/Source/src/iX/Widgets/iXPinTree.java");
+		String text2 = isp
+				.openFromFile("/home/abrar/Desktop/Varsity_project/Main/iXPAD/Source/src/iX/Widgets/iXTree.java");
+
 		diff_match_patch dmp = new diff_match_patch();
 		int i = 0;
 		int j = 0;
@@ -78,7 +80,6 @@ public class DiffIt extends JDialog {
 				i += d.text.length();
 			} else if (d.operation == Operation.INSERT) {
 
-				
 //				System.out.println("Insert " + i + " " + (i+d.text.length()));
 //				editor.setText(editor.getText() + d.text);
 
@@ -89,7 +90,7 @@ public class DiffIt extends JDialog {
 //					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
-				
+
 //				highlight(editor, d.text, new MyHighlightPainter(Color.GREEN));
 //				doHighlight(editor, d.operation, i, d.text.length());
 				j += d.text.length();
@@ -106,7 +107,7 @@ public class DiffIt extends JDialog {
 //					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
-				
+
 //				highlight(editor, d.text, new MyHighlightPainter(Color.RED));
 //				doHighlight(editor, d.operation, i, d.text.length());
 				k += d.text.length();
@@ -114,57 +115,54 @@ public class DiffIt extends JDialog {
 				System.out.println(d.operation + d.text);
 			}
 
-				editor.setText(editor.getText() + "<" + d.operation + ">" + d.text + "</" + d.operation + ">");
+			editor.setText(editor.getText() + "<" + d.operation + ">" + d.text + "</" + d.operation + ">");
 		}
-		
-		lbl.setText("Count of document modifications(old, new) :\nCharacter deleted : " + k + "\nCharacter inserted : " + j + "\nCharacter unchanged : " + i);
+
+		lbl.setText("Count of document modifications(old, new) :\nCharacter deleted : " + k + "\nCharacter inserted : "
+				+ j + "\nCharacter unchanged : " + i);
 	}
 
 	// A private subclass of the default highlight painter
-	class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter
-	{
-	    public MyHighlightPainter(Color color)
-	    {
-	        super(color);
-	    }
+	class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter {
+		public MyHighlightPainter(Color color) {
+			super(color);
+		}
 	}
-	public void highlight(JTextComponent textComp, String pattern, MyHighlightPainter myHighlightPainter)
-	{
-	    // First remove all old highlights
+
+	public void highlight(JTextComponent textComp, String pattern, MyHighlightPainter myHighlightPainter) {
+		// First remove all old highlights
 //	    removeHighlights(textComp);
 
-	    try
-	    {
-	        Highlighter hilite = textComp.getHighlighter();
-	        Document doc = textComp.getDocument();
-	        String text = doc.getText(0, doc.getLength());
-	        int pos = 0;
+		try {
+			Highlighter hilite = textComp.getHighlighter();
+			Document doc = textComp.getDocument();
+			String text = doc.getText(0, doc.getLength());
+			int pos = 0;
 
-	        // Search for pattern
-	        // see I have updated now its not case sensitive 
-	        while ((pos = text.toUpperCase().indexOf(pattern.toUpperCase(), pos)) >= 0)
-	        {
-	            // Create highlighter using private painter and apply around pattern
-	            hilite.addHighlight(pos, pos+pattern.length(), myHighlightPainter);
-	            pos += pattern.length();
-	        }
-	    } catch (BadLocationException e) {
-	    }
+			// Search for pattern
+			// see I have updated now its not case sensitive
+			while ((pos = text.toUpperCase().indexOf(pattern.toUpperCase(), pos)) >= 0) {
+				// Create highlighter using private painter and apply around pattern
+				hilite.addHighlight(pos, pos + pattern.length(), myHighlightPainter);
+				pos += pattern.length();
+			}
+		} catch (BadLocationException e) {
+		}
 	}
-	
+
 	public void doHighlight(JTextPane t, Operation op, int offset, int length) {
 		StyledDocument styledDoc = t.getStyledDocument();
 		StyleContext sc = StyleContext.getDefaultStyleContext();
-		
+
 //		SimpleAttributeSet sas = new SimpleAttributeSet();
-		
+
 		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.GREEN);
 		AttributeSet aset2 = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.RED);
 		AttributeSet aset3 = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.BLACK);
 		AttributeSet asetF = null;
-		AttributeSet asetF2 = null;		
-		
-		switch(op){
+		AttributeSet asetF2 = null;
+
+		switch (op) {
 		case INSERT:
 			asetF = sc.addAttribute(aset, StyleConstants.Bold, false);
 			break;
@@ -188,11 +186,11 @@ public class DiffIt extends JDialog {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 //	    styledDoc.setCharacterAttributes(offset, length, asetF, false);
-			
+
 	}
-	
+
 	public static void main(String[] args) {
 		DiffIt jk = new DiffIt();
 		jk.setVisible(true);

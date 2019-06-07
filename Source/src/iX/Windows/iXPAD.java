@@ -54,11 +54,10 @@ import iX.TextEditor.iXEditorPanel;
 public class iXPAD extends JFrame {
 
 	/**
-	 * Default serial version id.
-	 * Used for removing warning. 
+	 * Default serial version id. Used for removing warning.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	// Declaring the UI components
 	private Container mainContainer;
 	private JLabel appName;
@@ -79,132 +78,117 @@ public class iXPAD extends JFrame {
 	private JButton btnSettings;
 	private JButton btnAbout;
 	private JButton[] buttons;
-	
-	private iXTabPane ixTabPane;	
+
+	private iXTabPane ixTabPane;
 	// ========================
-	
-	// Declaring Variables	
+
+	// Declaring Variables
 	iXUtility ixUtil;
 	int iXTabCount;
 	// ===================
 
-	public iXPAD() {	
+	public iXPAD() {
 		// Initializing variables
-		
+
 		ixUtil = new iXUtility();
 		// ======================
-		
+
 		// Initializing UI
 		setupUI();
 		// ==============
-		
+
 	}
-	
+
 	private void setupUI() {
 		// Initialize variables
 		iXTabCount = 0;
-		
+
 		// Set frame properties
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setMinimumSize(new Dimension(800, 600));
-		this.setTitle("iXPAD");		 
+		this.setTitle("iXPAD");
 		this.setLocationRelativeTo(null); // Place the frame to the center of the monitor.
 		this.addWindowListener(new iXWindowListener(this));
 		// ====================
-		
+
 		// Initialize all layout
 		BorderLayout mainLayout = new BorderLayout(2, 2);
 		// =====================
-		
+
 		// Initialize main container
 		mainContainer = getContentPane();
 		mainContainer.setLayout(mainLayout);
 		// =========================
-		
+
 		// Initialize application name
 		appName = new JLabel("iXPAD");
 		appName.setFont(new Font("Arial", Font.BOLD, 28));
-		//====================
-		
+		// ====================
+
 		// Initialize the controls
-		
+
 		// buttons
 		btnOpen = new JButton("Open");
-		btnNewPage = new JButton("New Page");		
+		btnNewPage = new JButton("New Page");
 		btnSave = new JButton("Save");
 		btnSaveAs = new JButton("Save As");
 		btnCopy = new JButton("Copy");
-		btnPaste = new JButton("Paste");		
-		btnCut = new JButton("Cut");		
-		btnUndo = new JButton("Undo");		
-		btnRedo = new JButton("Redo");		
+		btnPaste = new JButton("Paste");
+		btnCut = new JButton("Cut");
+		btnUndo = new JButton("Undo");
+		btnRedo = new JButton("Redo");
 		btnSearch = new JButton("Search");
 		btnActivity = new JButton("Activity");
 		btnPinIt = new JButton("Pin It");
 		btnPinView = new JButton("Pin View");
 		btnSettings = new JButton("Settings");
 		btnAbout = new JButton("About");
-		
-		buttons = new JButton[] {
-									btnOpen,
-									btnNewPage,
-									btnSave,
-									btnSaveAs, 
-									btnCopy,
-									btnPaste,
-									btnCut,
-									btnUndo,
-									btnRedo,
-									btnSearch,
-									btnActivity,
-									btnPinIt,
-									btnPinView,
-									btnSettings,
-									btnAbout
-								};		
+
+		buttons = new JButton[] { btnOpen, btnNewPage, btnSave, btnSaveAs, btnCopy, btnPaste, btnCut, btnUndo, btnRedo,
+				btnSearch, btnActivity, btnPinIt, btnPinView, btnSettings, btnAbout };
 
 		for (JButton btn : buttons) {
 			if (btn == null) {
 				continue;
 			}
-			
+
 //			btn.setUI(new BasicButtonUI());
 //			btn.setContentAreaFilled(false);
 //			btn.setRolloverEnabled(true);	
-			
+
 			String btnText = btn.getText().replaceAll("\\b \\b", "");
 			btn.setIcon(ixUtil.getImageResource("btn" + btnText + ".png"));
-			btn.setHorizontalAlignment(JButton.LEFT);			
-			
+			btn.setHorizontalAlignment(JButton.LEFT);
+
 			KeyStroke actionKey = getButtonKeyStroke(btn.getText());
 			if (actionKey != null) {
 				ixUtil.addKeyShortcut(btn, btnText, actionKey, new iXAbstractButtonAction());
 			} else {
-				System.out.println("iXPAD : Action key not found for " + btn.getText()); 
+				System.out.println("iXPAD : Action key not found for " + btn.getText());
 			}
 		}
-		
+
 		btnUndo.setEnabled(false);
 		btnRedo.setEnabled(false);
 		// ==============================
-		
+
 		// Initialize panel's
-		
+
 		// buttonPanel
 		buttonPanel = new JPanel();
 //		buttonPanel.setBackground(Color.LIGHT_GRAY);
-		
+
 		GridBagLayout bg = new GridBagLayout();
 		buttonPanel.setLayout(bg);
-		
+
 		GridBagConstraints bgc = new GridBagConstraints();
-		
+
 		bgc.gridx = 0;
 		bgc.gridy = 0;
 		bgc.weighty = 0.1;
-		bgc.fill = GridBagConstraints.CENTER;		
+		bgc.fill = GridBagConstraints.CENTER;
 		buttonPanel.add(appName, bgc);
-		
+
 		bgc.weighty = 0.01;
 		bgc.fill = GridBagConstraints.HORIZONTAL;
 		int i = 0;
@@ -212,22 +196,22 @@ public class iXPAD extends JFrame {
 			bgc.gridy = ++i;
 			buttonPanel.add(btn, bgc);
 		}
-		
+
 		bgc.gridy = ++i;
 		bgc.weighty = 0.9;
 		buttonPanel.add(Box.createVerticalGlue(), bgc);
 		// ===================
-		
+
 		// iXTabPane
 		ixTabPane = new iXTabPane();
-		createTab();		
+		createTab();
 		// ==================
-		
+
 		// Add all component in container
 		mainContainer.add(buttonPanel, BorderLayout.LINE_START);
 		mainContainer.add(ixTabPane, BorderLayout.CENTER);
 		// ======================
-		
+
 		// Initialize button action listener
 		iXButtonActionListener act = new iXButtonActionListener(this);
 		for (JButton btn : buttons) {
@@ -237,7 +221,7 @@ public class iXPAD extends JFrame {
 
 		pack();
 		getiXEditor().requestFocusInWindow();
-		
+
 	}
 
 	public void createTab() {
@@ -247,50 +231,51 @@ public class iXPAD extends JFrame {
 			ixTabPane.addiXEditorPanel(new iXEditorPanel(this), "Untitled" + iXTabCount++);
 		}
 	}
-	
+
 	public void paintComponents(Graphics g) {
 		super.paintComponents(g);
 		g.drawImage((ixUtil.getImageResource("btnAbout.png")).getImage(), 0, 0, this);
 	}
-	public void showPinView() { 
+
+	public void showPinView() {
 		iXPin ixPin = new iXPin(this);
 		ixPin.setVisible(true);
 	}
-	
 
 	public void showActivity() {
 		iXActivity activity = new iXActivity(this);
-		activity.setVisible(true);;
+		activity.setVisible(true);
+		;
 	}
 
 	public void pinIt() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void showSettings() {
-		
+
 	}
-	
+
 	public void showAbout() {
-		
+
 	}
-	
+
 	public iXEditor getiXEditor() {
 		if (ixTabPane.getEditorPanel() == null) {
 			System.out.println("Null editor");
 			return null;
 		}
-		
+
 		System.out.println("Editor found");
 		return ixTabPane.getEditorPanel().getiXTextEditor();
 	}
-	
+
 	private KeyStroke getButtonKeyStroke(String buttonText) {
 		int key = 0;
 		int modifier = ActionEvent.CTRL_MASK;
-		
-		// TODO Store all buttons to hash map as string, jbutton 
+
+		// TODO Store all buttons to hash map as string, jbutton
 		if (buttonText == "Open") {
 			key = KeyEvent.VK_O;
 		} else if (buttonText == "New Page") {
@@ -314,7 +299,7 @@ public class iXPAD extends JFrame {
 			key = KeyEvent.VK_F;
 		} else if (buttonText == "Activity") {
 			key = KeyEvent.VK_A;
-			modifier |= ActionEvent.SHIFT_MASK;			
+			modifier |= ActionEvent.SHIFT_MASK;
 		} else if (buttonText == "Pin It") {
 			key = KeyEvent.VK_B;
 		} else if (buttonText == "Pin View") {
@@ -329,22 +314,20 @@ public class iXPAD extends JFrame {
 		} else {
 			return null;
 		}
-		
+
 		return KeyStroke.getKeyStroke(key, modifier);
 	}
-	
+
 	public void updateUndoRedo(boolean canUndo, boolean canRedo) {
-		System.out.println("From "  + canUndo + " " + canRedo);
+		System.out.println("From " + canUndo + " " + canRedo);
 		btnUndo.setEnabled(canUndo);
 		btnRedo.setEnabled(canRedo);
 	}
-	
 
 	private class iXAbstractButtonAction extends AbstractAction {
 
 		/**
-		 * Default serial version id.
-		 * Used for removing warning. 
+		 * Default serial version id. Used for removing warning.
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -352,8 +335,7 @@ public class iXPAD extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			((AbstractButton) e.getSource()).doClick();
 		}
-		
-	}
 
+	}
 
 }

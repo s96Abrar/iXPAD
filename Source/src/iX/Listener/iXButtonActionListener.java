@@ -26,11 +26,11 @@ import java.awt.event.ActionListener;
 import iX.TextEditor.iXEditor;
 import iX.Windows.iXPAD;
 
-public class iXButtonActionListener implements ActionListener{
-	
+public class iXButtonActionListener implements ActionListener {
+
 	private iXPAD ixPAD;
 	private iXEditor ixEditor;
-	
+
 	public iXButtonActionListener(Component parent) {
 		if (parent instanceof iXPAD) {
 			ixPAD = (iXPAD) parent;
@@ -40,7 +40,7 @@ public class iXButtonActionListener implements ActionListener{
 		}
 	}
 
-	public void actionPerformed(ActionEvent e) {		
+	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "Open") {
 			ixEditor.openFile();
 		} else if (e.getActionCommand() == "New Page") {
@@ -75,6 +75,5 @@ public class iXButtonActionListener implements ActionListener{
 			System.out.println("iXPAD : No action found for \"" + e.getActionCommand() + "\"");
 		}
 	}
-	
-	
+
 }

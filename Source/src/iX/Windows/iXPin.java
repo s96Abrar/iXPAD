@@ -39,22 +39,22 @@ public class iXPin extends JDialog {
 	private static final long serialVersionUID = 1L;
 //	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
 //	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
-	
+
 	private Component parent;
 	private JPanel buttonPanel;
 	private JButton btnClearActivity;
 	private iXPinTree treePin;
-	
+
 	public iXPin(Component parent) {
 		if (parent == null) {
 			System.out.println("iXPAD : PinView parent cannot be null");
 		}
-		
+
 		this.parent = parent;
 		setModal(true);
 		setupUI();
 	}
-	
+
 	private void setupUI() {
 		// Set frame properties
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -62,23 +62,23 @@ public class iXPin extends JDialog {
 		this.setTitle("iXPAD - Pin View");
 		this.setLocationRelativeTo(parent); // Place the frame to the center of the parent.
 		// ====================
-        
-        btnClearActivity = new JButton("Clear Pins");        
-        buttonPanel = new JPanel();
-        treePin = new iXPinTree(iXVariables.iXPADPinFile, "PinView");
-        
+
+		btnClearActivity = new JButton("Clear Pins");
+		buttonPanel = new JPanel();
+		treePin = new iXPinTree(iXVariables.iXPADPinFile, "PinView");
+
 		BoxLayout buttonPanelLayout = new BoxLayout(buttonPanel, BoxLayout.X_AXIS);
-		BorderLayout mainLayout = new BorderLayout();		
-        
-        buttonPanel.setLayout(buttonPanelLayout);
-        buttonPanel.add(Box.createHorizontalGlue());
-        buttonPanel.add(btnClearActivity);        
-        
-        this.setLayout(mainLayout);
-        this.add(buttonPanel, BorderLayout.PAGE_START);
-        this.add(treePin, BorderLayout.CENTER);
+		BorderLayout mainLayout = new BorderLayout();
+
+		buttonPanel.setLayout(buttonPanelLayout);
+		buttonPanel.add(Box.createHorizontalGlue());
+		buttonPanel.add(btnClearActivity);
+
+		this.setLayout(mainLayout);
+		this.add(buttonPanel, BorderLayout.PAGE_START);
+		this.add(treePin, BorderLayout.CENTER);
 	}
-	
+
 	public static void main(String[] args) {
 		iXPin test = new iXPin(null);
 		test.setVisible(true);

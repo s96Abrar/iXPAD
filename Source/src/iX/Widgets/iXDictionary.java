@@ -19,11 +19,11 @@ public class iXDictionary extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private String word;
 	private String dictFile = "/dict/dictfile.txt";
 	Hashtable<String, String> di;
-	
+
 	public iXDictionary(String word) {
 		// Set frame properties
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -32,27 +32,27 @@ public class iXDictionary extends JDialog {
 		this.setLocationRelativeTo(null); // Place the frame to the center of the parent.
 		// ====================
 		this.word = word;
-		
+
 		di = loadDict();
-		
+
 		JLabel lbl = new JLabel();
 		JTextArea txt = new JTextArea();
 		add(lbl, BorderLayout.PAGE_START);
 		add(txt, BorderLayout.CENTER);
-		
+
 		lbl.setText(word);
 		txt.setEditable(false);
 		txt.setLineWrap(true);
 		txt.setText(di.get(word));
 	}
-	
+
 	private Hashtable<String, String> loadDict() {
 		Hashtable<String, String> hash = new Hashtable<>();
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new InputStreamReader(iXUtility.class.getResourceAsStream(dictFile)));
 			String currentLine = null;
-			while ((currentLine = br.readLine() ) != null) {
+			while ((currentLine = br.readLine()) != null) {
 				String[] tList = currentLine.split(">>>>>");
 				if (tList.length > 1) {
 					String key = (tList[0]);
@@ -65,10 +65,10 @@ public class iXDictionary extends JDialog {
 		} catch (Exception e) {
 			System.out.println("iXPAD : " + e.getMessage());
 		}
-		
+
 		return hash;
 	}
-	
+
 	public static void main(String[] args) {
 		iXDictionary id = new iXDictionary("ACCESS");
 		id.setVisible(true);

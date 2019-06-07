@@ -27,21 +27,21 @@ public class iXPinIt extends JDialog {
 
 //	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
 //	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
-	
+
 	public iXPinIt(String filePath, Component parent) {
-		
+
 		this.filePath = filePath;
 		setupUI(parent);
 	}
-	
+
 	private JCheckBox chkOldSection;
-	private JComboBox<String> sectionList; 
+	private JComboBox<String> sectionList;
 	private JCheckBox chkNewSection;
 	private JTextField tfNewSection;
 	private JLabel lblFileName;
 	private JButton btnOK;
 	private String filePath;
-	
+
 	private void setupUI(Component parent) {
 		// Set frame properties
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -49,11 +49,10 @@ public class iXPinIt extends JDialog {
 		this.setTitle("iXPAD - Pin It");
 		this.setLocationRelativeTo(parent); // Place the frame to the center of the parent.
 		// ====================
-		
+
 		chkOldSection = new JCheckBox("Add to existing section");
-		sectionList = new JComboBox<>(); 
-		
-		
+		sectionList = new JComboBox<>();
+
 		ArrayList<String> list = new ArrayList<>();
 		BufferedReader br;
 		try {
@@ -69,36 +68,38 @@ public class iXPinIt extends JDialog {
 			System.out.println("iXPAD : " + e.getMessage());
 		}
 		System.out.println("Sr " + list.toString());
-		
+
 //		jk = (String[]) list.toArray();
 //		if (jk != null) {
 //			DefaultComboBoxModel<String> d = new DefaultComboBoxModel<>(jk);
 //			sectionList.setModel(d);
 //		}
-		for(String s : list) {
+		for (String s : list) {
 			sectionList.addItem(s);
 		}
 		chkNewSection = new JCheckBox("Add to new section ");
 		tfNewSection = new JTextField();
 		lblFileName = new JLabel(filePath);
 		btnOK = new JButton("OK");
-		
+
 		iXUtility ixUtil = new iXUtility();
-		
-		btnOK.addActionListener( (l) -> {
+
+		btnOK.addActionListener((l) -> {
 			if (chkNewSection.isSelected()) {
-				ixUtil.saveToFile(tfNewSection.getText() + "\t\t\t" + lblFileName.getText() + "\n", iXVariables.iXPADPinFile, true);
+				ixUtil.saveToFile(tfNewSection.getText() + "\t\t\t" + lblFileName.getText() + "\n",
+						iXVariables.iXPADPinFile, true);
 				ixUtil.saveToFile(tfNewSection.getText() + "\n", iXVariables.iXPADPinSectionFile, true);
 			} else if (chkOldSection.isSelected()) {
-				ixUtil.saveToFile(sectionList.getSelectedItem() + "\t\t\t" + lblFileName.getText() + "\n", iXVariables.iXPADPinFile, true);
-				ixUtil.saveToFile((String)sectionList.getSelectedItem() + "\n", iXVariables.iXPADPinSectionFile, true);
+				ixUtil.saveToFile(sectionList.getSelectedItem() + "\t\t\t" + lblFileName.getText() + "\n",
+						iXVariables.iXPADPinFile, true);
+				ixUtil.saveToFile((String) sectionList.getSelectedItem() + "\n", iXVariables.iXPADPinSectionFile, true);
 			}
 		});
-				
+
 		GridBagLayout layout = new GridBagLayout();
-		
+
 		setLayout(layout);
-		
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -121,14 +122,11 @@ public class iXPinIt extends JDialog {
 		gbc.gridy = 3;
 //		gbc.ipady = 0;
 		add(btnOK, gbc);
-				
+
 	}
-	
-	
-	
+
 	public static void main(String[] args) {
 		iXPinIt pin = new iXPinIt("/home/abrar/", null);
 		pin.setVisible(true);
 	}
 }
-
