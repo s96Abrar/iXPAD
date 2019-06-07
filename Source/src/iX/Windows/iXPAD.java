@@ -90,6 +90,7 @@ public class iXPAD extends JFrame {
 
 	public iXPAD() {	
 		// Initializing variables
+		
 		ixUtil = new iXUtility();
 		// ======================
 		

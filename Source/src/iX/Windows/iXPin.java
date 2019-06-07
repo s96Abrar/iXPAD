@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import iX.Utilities.iXVariables;
 import iX.Widgets.iXPinTree;
 
 public class iXPin extends JDialog {
@@ -36,8 +37,8 @@ public class iXPin extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
-	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
+//	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
+//	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
 	
 	private Component parent;
 	private JPanel buttonPanel;
@@ -64,7 +65,7 @@ public class iXPin extends JDialog {
         
         btnClearActivity = new JButton("Clear Pins");        
         buttonPanel = new JPanel();
-        treePin = new iXPinTree(pinFile, "PinView");
+        treePin = new iXPinTree(iXVariables.iXPADPinFile, "PinView");
         
 		BoxLayout buttonPanelLayout = new BoxLayout(buttonPanel, BoxLayout.X_AXIS);
 		BorderLayout mainLayout = new BorderLayout();		

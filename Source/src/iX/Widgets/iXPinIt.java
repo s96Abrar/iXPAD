@@ -23,6 +23,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import iX.Utilities.iXUtility;
+import iX.Utilities.iXVariables;
+import iX.Windows.iXPAD;
 
 public class iXPinIt extends JDialog {
 
@@ -31,8 +33,8 @@ public class iXPinIt extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
-	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
+//	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
+//	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
 	
 	public iXPinIt(String filePath, Component parent) {
 		
@@ -63,7 +65,7 @@ public class iXPinIt extends JDialog {
 		ArrayList<String> list = new ArrayList<>();
 		BufferedReader br;
 		try {
-			br = new BufferedReader(new FileReader(pinSectionFile));
+			br = new BufferedReader(new FileReader(iXVariables.iXPADPinSectionFile));
 			String currentLine = "";
 			while ((currentLine = br.readLine()) != null) {
 				System.out.println("Line " + currentLine);
@@ -93,11 +95,11 @@ public class iXPinIt extends JDialog {
 		
 		btnOK.addActionListener( (l) -> {
 			if (chkNewSection.isSelected()) {
-				ixUtil.saveToFile(tfNewSection.getText() + "\t\t\t" + lblFileName.getText() + "\n", pinFile, true);
-				ixUtil.saveToFile(tfNewSection.getText() + "\n", pinSectionFile, true);
+				ixUtil.saveToFile(tfNewSection.getText() + "\t\t\t" + lblFileName.getText() + "\n", iXVariables.iXPADPinFile, true);
+				ixUtil.saveToFile(tfNewSection.getText() + "\n", iXVariables.iXPADPinSectionFile, true);
 			} else if (chkOldSection.isSelected()) {
-				ixUtil.saveToFile(sectionList.getSelectedItem() + "\t\t\t" + lblFileName.getText() + "\n", pinFile, true);
-				ixUtil.saveToFile((String)sectionList.getSelectedItem() + "\n", pinSectionFile, true);
+				ixUtil.saveToFile(sectionList.getSelectedItem() + "\t\t\t" + lblFileName.getText() + "\n", iXVariables.iXPADPinFile, true);
+				ixUtil.saveToFile((String)sectionList.getSelectedItem() + "\n", iXVariables.iXPADPinSectionFile, true);
 			}
 		});
 				

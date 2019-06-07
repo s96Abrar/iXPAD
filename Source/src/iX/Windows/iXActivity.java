@@ -46,6 +46,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import iX.Utilities.iXUtility;
+import iX.Utilities.iXVariables;
 import iX.Widgets.iXTree;
 
 public class iXActivity extends JDialog implements ListSelectionListener {
@@ -54,7 +55,7 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final String activityFile = System.getProperty("user.home") + "/iXPADActivity.txt";
+//	public static final String activityFile = System.getProperty("user.home") + "/iXPADActivity.txt";
 
 	private Component parent;
 	private JPanel buttonPanel;
@@ -92,7 +93,7 @@ public class iXActivity extends JDialog implements ListSelectionListener {
         	clearActivity();
         });
         buttonPanel = new JPanel();
-        treeActivity = new iXTree(activityFile, "Activity");
+        treeActivity = new iXTree(iXVariables.iXPADActivityFile, "Activity");
         treeActivity.expandNode(treeActivity.getRootName());
         
         JScrollPane treeScroll = new JScrollPane();
@@ -127,7 +128,7 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 		
 		BufferedReader bbr;
 		try {
-			bbr = new BufferedReader(new FileReader(activityFile));
+			bbr = new BufferedReader(new FileReader(iXVariables.iXPADActivityFile));
 			String currentLine = null;
 			while ((currentLine = bbr.readLine()) != null) {
 				String[] tList = currentLine.split("\t\t\t");
@@ -214,13 +215,13 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 	
 	public void saveActivity(String lastFilePath) {
 		String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH.mm.ss.SSS dd.MM.yyyy")) + "\t\t\t" + lastFilePath;
-		ixUtil.saveToFile(str + "\n", activityFile, true);
+		ixUtil.saveToFile(str + "\n", iXVariables.iXPADActivityFile, true);
 //		Utilities.appendStrToFile(str + "\n", activityFile);
 	}
 
 	private void clearActivity() {
 		if (treeActivity.isEmpty() == false) {
-			ixUtil.saveToFile("", activityFile);
+			ixUtil.saveToFile("", iXVariables.iXPADActivityFile);
 			treeActivity.clearAll();
 		}
 	}

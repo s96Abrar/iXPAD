@@ -29,9 +29,9 @@ public class iXPinTree extends JTree {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String VALUE_SEPERATOR = "\t\t\t";
-	private String DATE_FORMAT = "dd.MM.yyyy";
-	private String DATE_TIME_FORMAT = "HH.mm.ss.SSS dd.MM.yyyy";
+//	private String VALUE_SEPERATOR = "\t\t\t";
+//	private String DATE_FORMAT = "dd.MM.yyyy";
+//	private String DATE_TIME_FORMAT = "HH.mm.ss.SSS dd.MM.yyyy";
 	
 	private String rootName;
 	private boolean isTreeEmpty;
@@ -90,7 +90,7 @@ public class iXPinTree extends JTree {
 			br = new BufferedReader(new FileReader(fileName));
 			String currentLine = null;
 			while ((currentLine = br.readLine() ) != null) {
-				String[] tList = currentLine.split(VALUE_SEPERATOR);
+				String[] tList = currentLine.split(iXVariables.VALUE_SEPERATOR);
 				if (tList.length > 1) {
 					//try {
 						String key = tList[0];//new SimpleDateFormat(DATE_TIME_FORMAT).parse(tList[0]);
