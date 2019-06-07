@@ -24,7 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import iX.TextEditor.iXEditor;
-import iX.Widgets.iXPAD;
+import iX.Windows.iXPAD;
 
 public class iXButtonActionListener implements ActionListener{
 	

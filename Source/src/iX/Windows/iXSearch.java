@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package iX.Widgets;
+package iX.Windows;
 
 import java.awt.event.ActionListener;
 

@@ -19,40 +19,65 @@
 
 package iX;
 
+import java.util.ArrayList;
+
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import iX.Widgets.iXPAD;
+import iX.Windows.iXPAD;
+import iX.Utilities.iXMessage;
+import iX.Utilities.iXUtility;
+import iX.Utilities.iXVariables;
 
 public class iXMain {
 
 	public static void main(String[] args) {
 		try {
-			String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-			String windows2 = "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
-			String linuxGTK = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-			
-			String custom = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
-			
 			String osName = System.getProperty("os.name");
-			System.out.println(osName);
+			System.out.println("iXPAD : Info : OS Name - \"" + osName + "\"");
+						
 			String pathName = System.getProperty("user.home");
-			System.out.println(pathName);
+			System.out.println("iXPAD : Info : User home directrory - \"" + pathName + "\"");
+			
+			ArrayList<String> list = new ArrayList<>();
+			for (LookAndFeelInfo f : UIManager.getInstalledLookAndFeels()) {
+				list.add(f.getClassName());
+			}
+			System.out.println("iXPAD : Info : Available installed theme " + list);
+
+			// TODO Move to settings
+			boolean custom = false;
+			boolean customLight = false;
 			
 			if (osName.equals("Linux")) {
-				System.out.println(osName + linuxGTK);
-//				UIManager.setLookAndFeel(linuxGTK);
+				if (list.contains(iXVariables.linuxGTKTheme)) {
+					UIManager.setLookAndFeel(iXVariables.linuxGTKTheme);
+				} else {
+					custom = true;
+				}
 			} else {
-				UIManager.setLookAndFeel(windows);
+				if (list.contains(iXVariables.windowsTheme)) {
+					UIManager.setLookAndFeel(iXVariables.windowsTheme);
+				} else {
+					custom = true;
+				}
 			}
-			UIManager.setLookAndFeel(custom);
-//			UIManager.setLookAndFeel(new InfoNodeLookAndFeel());
-			for (LookAndFeelInfo f : UIManager.getInstalledLookAndFeels()) {
-				System.out.println(f.toString());
-			}
-		} catch(Exception e) {
 			
+			if (custom == true) {
+				if (customLight == true) {
+					UIManager.setLookAndFeel(iXVariables.lightThemeNimbus); 
+				} else {
+					// TODO
+					// Set the black theme
+					// Create a custom class
+					
+				}
+			}
+			
+		} catch(Exception e) {
+			System.out.println("iXPAD : Warning : Problem occurs in setting theme(" + e.getMessage() + ").");
 		}
+		
 		iXPAD ixpad = new iXPAD();
 		ixpad.setVisible(true);
 	}

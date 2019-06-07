@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package iX.Widgets;
+package iX.Windows;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -28,6 +28,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+
+import iX.Widgets.iXPinTree;
 
 public class iXPin extends JDialog {
 	/**

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package iX.Widgets;
+package iX.Windows;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -46,6 +46,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import iX.Utilities.iXUtility;
+import iX.Widgets.iXTree;
 
 public class iXActivity extends JDialog implements ListSelectionListener {
 	/**

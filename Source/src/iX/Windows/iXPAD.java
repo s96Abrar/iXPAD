@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package iX.Widgets;
+package iX.Windows;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,6 +42,7 @@ import javax.swing.KeyStroke;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import iX.Utilities.iXUtility;
+import iX.Widgets.iXTabPane;
 import iX.Listener.iXButtonActionListener;
 import iX.Listener.iXWindowListener;
 import iX.TextEditor.iXEditor;
@@ -132,9 +133,6 @@ public class iXPAD extends JFrame {
 		
 		// buttons
 		btnOpen = new JButton("Open");
-		// TODO Remove
-//		btnOpen.setIcon(ixUtil.getImageResource("btnOpen.png"));
-		
 		btnNewPage = new JButton("New Page");		
 		btnSave = new JButton("Save");
 		btnSaveAs = new JButton("Save As");
@@ -282,7 +280,6 @@ public class iXPAD extends JFrame {
 	}
 	
 	public iXEditor getiXEditor() {
-//		return editorPanel.getiXTextEditor();
 		if (ixTabPane.getEditorPanel() == null) {
 			System.out.println("Null editor");
 			return null;
@@ -291,14 +288,6 @@ public class iXPAD extends JFrame {
 		System.out.println("Editor found");
 		return ixTabPane.getEditorPanel().getiXTextEditor();
 	}
-	
-//	private boolean getiXEditorManageCanUndo() {
-//		return getiXEditor().canUndo();
-//	}
-//	
-//	private boolean getiXEditorManageCanRedo() {
-//		return getiXEditor().canRedo();
-//	}
 	
 	private KeyStroke getButtonKeyStroke(String buttonText) {
 		int key = 0;

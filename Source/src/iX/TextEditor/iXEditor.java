@@ -54,8 +54,8 @@ import javax.swing.text.StyledDocument;
 import javax.swing.undo.UndoManager;
 
 import iX.Utilities.iXUtility;
-import iX.Widgets.iXPAD;
-import iX.Widgets.iXSearch;
+import iX.Windows.iXPAD;
+import iX.Windows.iXSearch;
 import iX.SpellCheck.WaveHighlighter;
 
 /**

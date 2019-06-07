@@ -24,7 +24,7 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JOptionPane;
 
-import iX.Widgets.iXPAD;
+import iX.Windows.iXPAD;
 
 public class iXWindowListener implements WindowListener {
 	
