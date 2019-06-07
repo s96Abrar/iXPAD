@@ -15,6 +15,11 @@ import iX.Utilities.iXUtility;
 
 public class iXDictionary extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String word;
 	private String dictFile = "/dict/dictfile.txt";
 	Hashtable<String, String> di;

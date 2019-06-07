@@ -25,8 +25,6 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import iX.Windows.iXPAD;
-import iX.Utilities.iXMessage;
-import iX.Utilities.iXUtility;
 import iX.Utilities.iXVariables;
 
 public class iXMain {

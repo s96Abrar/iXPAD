@@ -55,8 +55,6 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 
-//	public static final String activityFile = System.getProperty("user.home") + "/iXPADActivity.txt";
-
 	private Component parent;
 	private JPanel buttonPanel;
 	private JButton btnClearActivity;

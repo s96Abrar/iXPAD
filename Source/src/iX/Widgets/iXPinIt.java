@@ -7,14 +7,7 @@ import java.awt.GridBagLayout;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -24,7 +17,6 @@ import javax.swing.JTextField;
 
 import iX.Utilities.iXUtility;
 import iX.Utilities.iXVariables;
-import iX.Windows.iXPAD;
 
 public class iXPinIt extends JDialog {
 

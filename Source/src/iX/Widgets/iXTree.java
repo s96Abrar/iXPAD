@@ -27,10 +27,6 @@ public class iXTree extends JTree {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String VALUE_SEPERATOR = "\t\t\t";
-	private String DATE_FORMAT = "dd.MM.yyyy";
-	private String DATE_TIME_FORMAT = "HH.mm.ss.SSS dd.MM.yyyy";
-	
 	private String rootName;
 	private boolean isTreeEmpty;
 
@@ -88,10 +84,10 @@ public class iXTree extends JTree {
 			br = new BufferedReader(new FileReader(fileName));
 			String currentLine = null;
 			while ((currentLine = br.readLine() ) != null) {
-				String[] tList = currentLine.split(VALUE_SEPERATOR);
+				String[] tList = currentLine.split(iXVariables.VALUE_SEPERATOR);
 				if (tList.length > 1) {
 					try {
-						Date key = new SimpleDateFormat(DATE_TIME_FORMAT).parse(tList[0]);
+						Date key = new SimpleDateFormat(iXVariables.DATE_TIME_FORMAT).parse(tList[0]);
 						String value = tList[1];
 						hash.put(key, value);
 					} catch (ParseException e) {

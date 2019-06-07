@@ -3,10 +3,7 @@ package iX.Widgets;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.TreeMap;
@@ -19,7 +16,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import iX.Utilities.iXUtility;
 import iX.Utilities.iXVariables;
 
 public class iXPinTree extends JTree {
@@ -28,10 +24,6 @@ public class iXPinTree extends JTree {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-//	private String VALUE_SEPERATOR = "\t\t\t";
-//	private String DATE_FORMAT = "dd.MM.yyyy";
-//	private String DATE_TIME_FORMAT = "HH.mm.ss.SSS dd.MM.yyyy";
 	
 	private String rootName;
 	private boolean isTreeEmpty;
@@ -166,20 +158,7 @@ public class iXPinTree extends JTree {
 
 	public static final String pinFile = System.getProperty("user.home") + "/iXPADActivity.txt";
 	public static void main(String[] args) {
-		try {
-			String windows = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-			String linuxGTK = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-			
-			String osName = System.getProperty("os.name");
-			System.out.println(osName);
-			
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-			for (LookAndFeelInfo f : UIManager.getInstalledLookAndFeels()) {
-				System.out.println(f.toString());
-			}
-		} catch(Exception e) {
-			
-		}
+		
 		JFrame jf = new JFrame();
 		iXPinTree tree = new iXPinTree(pinFile, "Pin View");
 //		tree.setShowsRootHandles(false);
