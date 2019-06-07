@@ -219,7 +219,7 @@ public class iXPAD extends JFrame {
 		}
 		// ===================
 
-		pack();
+		this.pack();
 		getiXEditor().requestFocusInWindow();
 
 	}

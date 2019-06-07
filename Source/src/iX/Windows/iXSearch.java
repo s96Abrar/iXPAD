@@ -22,128 +22,120 @@ package iX.Windows;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
-public class iXSearch extends JFrame implements ActionListener {
+public class iXSearch extends JDialog implements ActionListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private Component parent;
+	
 	int startIndex = 0;
 	int select_start = -1;
-	JLabel lab1, lab2;
-	JTextField textF, textR;
-	JButton findBtn, findNext, replace, replaceAll, cancel;
-	private JTextPane txt;
+	
+	private JLabel lblFind;
+	private JLabel lblReplace;
+	private JTextField txtFind;
+	private JTextField txtReplace;
+	private JButton btnFind;
+	private JButton btnFindNext;
+	private JButton btnReplace;
+	private JButton btnReplaceAll;
+	private JButton btnCancel;
+	
+	private JTextPane editor;
 
-	public iXSearch(JTextPane text) {
-		this.txt = text;
-
-		lab1 = new JLabel("Find:");
-		lab2 = new JLabel("Replace:");
-		textF = new JTextField(30);
-		textR = new JTextField(30);
-		findBtn = new JButton("Find");
-		findNext = new JButton("Find Next");
-		replace = new JButton("Replace");
-		replaceAll = new JButton("Replace All");
-		cancel = new JButton("Cancel");
-
-		// Set Layout NULL
-		setLayout(null);
-
-		// Set the width and height of the label
-		int labWidth = 80;
-		int labHeight = 20;
-
-		// Adding labels
-		lab1.setBounds(10, 10, labWidth, labHeight);
-		add(lab1);
-		textF.setBounds(10 + labWidth, 10, 120, 20);
-		add(textF);
-		lab2.setBounds(10, 10 + labHeight + 10, labWidth, labHeight);
-		add(lab2);
-		textR.setBounds(10 + labWidth, 10 + labHeight + 10, 120, 20);
-		add(textR);
-
-		// Adding buttons
-		findBtn.setBounds(225, 6, 115, 20);
-		add(findBtn);
-		findBtn.addActionListener(this);
-
-		findNext.setBounds(225, 28, 115, 20);
-		add(findNext);
-		findNext.addActionListener(this);
-
-		replace.setBounds(225, 50, 115, 20);
-		add(replace);
-		replace.addActionListener(this);
-
-		replaceAll.setBounds(225, 72, 115, 20);
-		add(replaceAll);
-		replaceAll.addActionListener(this);
-
-		cancel.setBounds(225, 94, 115, 20);
-		add(cancel);
-		cancel.addActionListener(this);
-
-		// Set the width and height of the window
-		int width = 360;
-		int height = 160;
-
-		// Set size window
-		setSize(width, height);
-
-		// center the frame on the frame
-		setLocationRelativeTo(txt);
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	public iXSearch(JTextPane textEditor) {
+		this.editor = textEditor;
+		setupUI();
 	}
 
+	private void setupUI() {
+		// Set frame properties
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setMinimumSize(new Dimension(450, 120));
+		this.setTitle("iXPAD - Find/Replace");
+		this.setLocationRelativeTo(parent);
+		// ====================
+		
+		GridLayout mainLayout = new GridLayout(3, 4, 2, 2);
+		
+		lblFind = new JLabel("Find");
+		lblReplace = new JLabel("Replace");
+		txtFind = new JTextField();
+		txtReplace = new JTextField();
+		btnFind = new JButton("Find");
+		btnFindNext = new JButton("Find Next");
+		btnReplace = new JButton("Replace");
+		btnReplaceAll = new JButton("Replace All");
+		btnCancel = new JButton("Cancel");
+		
+		this.setLayout(mainLayout);
+		
+		this.add(lblFind, "Center", 0);
+		this.add(txtFind, 1);
+		this.add(btnFind, 2);
+		this.add(btnFindNext, 3);
+		this.add(lblReplace, 4);
+		this.add(txtReplace, 5);
+		this.add(btnReplace, 6);
+		this.add(btnReplaceAll, 7);
+		this.add(new JLabel(""), 8);
+		this.add(new JLabel(""), 9);
+		this.add(new JLabel(""), 10);
+		this.add(btnCancel, 11);
+		
+	}
+	
 	public void find() {
-		txt.requestFocus();
-		select_start = txt.getText().toLowerCase().indexOf(textF.getText().toLowerCase());
+		editor.requestFocus();
+		select_start = editor.getText().toLowerCase().indexOf(txtFind.getText().toLowerCase());
 		if (select_start == -1) {
 			startIndex = 0;
-			JOptionPane.showMessageDialog(null, "Could not find \"" + textF.getText() + "\"!");
+			JOptionPane.showMessageDialog(null, "Could not find \"" + txtFind.getText() + "\"!");
 			return;
 		}
-		if (select_start == txt.getText().toLowerCase().lastIndexOf(textF.getText().toLowerCase())) {
+		if (select_start == editor.getText().toLowerCase().lastIndexOf(txtFind.getText().toLowerCase())) {
 			startIndex = 0;
 		}
-		int select_end = select_start + textF.getText().length();
-		txt.select(select_start, select_end);
-		txt.requestFocus();
+		int select_end = select_start + txtFind.getText().length();
+		editor.select(select_start, select_end);
+		editor.requestFocus();
 	}
 
 	public void findNext() {
-		String selection = txt.getSelectedText();
+		String selection = editor.getSelectedText();
 		try {
 			selection.equals("");
 		} catch (NullPointerException e) {
-			selection = textF.getText();
+			selection = txtFind.getText();
 			try {
 				selection.equals("");
 			} catch (NullPointerException e2) {
 				selection = JOptionPane.showInputDialog("Find:");
-				textF.setText(selection);
+				txtFind.setText(selection);
 			}
 		}
 		try {
-			int select_start = txt.getText().toLowerCase().indexOf(selection.toLowerCase(), startIndex);
+			int select_start = editor.getText().toLowerCase().indexOf(selection.toLowerCase(), startIndex);
 			int select_end = select_start + selection.length();
-			txt.select(select_start, select_end);
+			editor.select(select_start, select_end);
 			startIndex = select_end + 1;
 
-			if (select_start == txt.getText().toLowerCase().lastIndexOf(selection.toLowerCase())) {
+			if (select_start == editor.getText().toLowerCase().lastIndexOf(selection.toLowerCase())) {
 				startIndex = 0;
 			}
 		} catch (NullPointerException e) {
@@ -154,28 +146,33 @@ public class iXSearch extends JFrame implements ActionListener {
 		try {
 			find();
 			if (select_start != -1)
-				txt.replaceSelection(textR.getText());
+				editor.replaceSelection(txtReplace.getText());
 		} catch (NullPointerException e) {
 			System.out.print("Null Pointer Exception: " + e);
 		}
 	}
 
 	public void replaceAll() {
-		txt.setText(txt.getText().toLowerCase().replaceAll(textF.getText().toLowerCase(), textR.getText()));
+		editor.setText(editor.getText().toLowerCase().replaceAll(txtFind.getText().toLowerCase(), txtReplace.getText()));
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == findBtn) {
+		if (e.getSource() == btnFind) {
 			find();
-		} else if (e.getSource() == findNext) {
+		} else if (e.getSource() == btnFindNext) {
 			findNext();
-		} else if (e.getSource() == replace) {
+		} else if (e.getSource() == btnReplace) {
 			replace();
-		} else if (e.getSource() == replaceAll) {
+		} else if (e.getSource() == btnReplaceAll) {
 			replaceAll();
-		} else if (e.getSource() == cancel) {
+		} else if (e.getSource() == btnCancel) {
 			this.setVisible(false);
 		}
+	}
+	
+	public static void main(String[] args) {
+		iXSearch s = new iXSearch(new JTextPane());
+		s.setVisible(true);
 	}
 
 }

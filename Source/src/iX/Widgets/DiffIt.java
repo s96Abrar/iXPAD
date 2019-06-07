@@ -18,9 +18,9 @@ import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 
-import iX.Utilities.diff_match_patch;
-import iX.Utilities.diff_match_patch.Diff;
-import iX.Utilities.diff_match_patch.Operation;
+import iX.Duplicity.diff_match_patch;
+import iX.Duplicity.diff_match_patch.Diff;
+import iX.Duplicity.diff_match_patch.Operation;
 import iX.Utilities.iXUtility;
 
 public class DiffIt extends JDialog {

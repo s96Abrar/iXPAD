@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package iX.Utilities;
+package iX.Duplicity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
