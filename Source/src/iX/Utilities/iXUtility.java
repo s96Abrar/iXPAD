@@ -59,7 +59,7 @@ public class iXUtility {
 		try {
 			return iXUtility.class.getResourceAsStream(resourceFolder + resourceName);
 		} catch (Exception ex) {
-			System.out.println("Resource not found (" + resourceName + ")!!!");
+			System.out.println("iXPAD : Warning : Resource not found (" + resourceName + ")!!!");
 			ex.printStackTrace();
 			return null;
 		}
@@ -74,15 +74,16 @@ public class iXUtility {
 	public ImageIcon getImageResource(String resourceName) {
 		ImageIcon img = null;
 
-		if (getiXResource(resourceName, IMAGE_RESOURCE_PATH) == null) {
-			System.out.println("Null resource (" + resourceName + ")");
+		InputStream imageStream = getiXResource(resourceName, IMAGE_RESOURCE_PATH);
+		if (imageStream == null) {
+			System.out.println("iXPAD : Warning : Null resource (" + resourceName + ")");
 			return img;
 		}
 
 		try {
-			img = new ImageIcon(ImageIO.read(getiXResource(resourceName, IMAGE_RESOURCE_PATH)));
+			img = new ImageIcon(ImageIO.read(imageStream));
 		} catch (IOException e) {
-			System.out.println("Image cannot be loaded");
+			System.out.println("iXPAD : Warning : Image cannot be loaded");
 			e.printStackTrace();
 		}
 		return img;

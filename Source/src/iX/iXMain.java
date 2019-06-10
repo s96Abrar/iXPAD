@@ -49,7 +49,9 @@ public class iXMain {
 
 			if (osName.equals("Linux")) {
 				if (list.contains(iXVariables.linuxGTKTheme)) {
+					// Freezes UI when system changes the theme.
 					UIManager.setLookAndFeel(iXVariables.linuxGTKTheme);
+//					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				} else {
 					custom = true;
 				}

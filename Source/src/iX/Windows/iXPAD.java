@@ -28,7 +28,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Box;
@@ -157,7 +156,7 @@ public class iXPAD extends JFrame {
 //			btn.setRolloverEnabled(true);	
 
 			String btnText = btn.getText().replaceAll("\\b \\b", "");
-			btn.setIcon(ixUtil.getImageResource("btn" + btnText + ".png"));
+			btn.setIcon(ixUtil.getImageResource("btn" + btnText + ".png"));			
 			btn.setHorizontalAlignment(JButton.LEFT);
 
 			KeyStroke actionKey = getButtonKeyStroke(btn.getText());
@@ -171,7 +170,7 @@ public class iXPAD extends JFrame {
 		btnUndo.setEnabled(false);
 		btnRedo.setEnabled(false);
 		// ==============================
-
+		
 		// Initialize panel's
 
 		// buttonPanel

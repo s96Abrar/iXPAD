@@ -699,7 +699,7 @@ public class iXEditor extends JTextPane implements DocumentListener {
 		SwingUtilities.invokeLater(syntaxHighlight);
 	}
 
-	Color[] colors = { Color.BLACK, Color.decode("#008000"), Color.decode("#008000"), Color.decode("#008000"),
+	Color[] colors = { this.getForeground(), Color.decode("#008000"), Color.decode("#008000"), Color.decode("#008000"),
 			Color.decode("#800080"), Color.decode("#808080"), Color.decode("#008080"), Color.decode("#808000"),
 			Color.decode("#0000ff") };
 
