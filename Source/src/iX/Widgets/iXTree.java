@@ -19,27 +19,17 @@
 
 package iX.Widgets;
 
-import java.awt.Component;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
-import javax.swing.Icon;
-import javax.swing.JFrame;
 import javax.swing.JTree;
-import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import iX.Utilities.iXUtility;
@@ -61,15 +51,6 @@ public class iXTree extends JTree {
 	private boolean isTreeEmpty;
 
 	private HashMap<String, DefaultMutableTreeNode> treeStructureMap;
-
-//	private Comparator<String> compare = new Comparator<String>() {
-//		public int compare(String obj1, String obj2) {
-//			if (obj1 == null || obj2 == null)
-//				return 0;
-//
-//			return obj2.compareTo(obj1); // Sort in descending order
-//		}
-//	};
 
 	private Comparator<String> compare = null;
 	
