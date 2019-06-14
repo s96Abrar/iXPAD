@@ -18,9 +18,9 @@ import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 
-import iX.Duplicity.diff_match_patch;
-import iX.Duplicity.diff_match_patch.Diff;
-import iX.Duplicity.diff_match_patch.Operation;
+import iX.Duplicity.DiffMatch;
+import iX.Duplicity.DiffMatch.Diff;
+import iX.Duplicity.DiffMatch.Operation;
 import iX.Utilities.iXUtility;
 
 public class DiffIt extends JDialog {
@@ -58,7 +58,7 @@ public class DiffIt extends JDialog {
 		String text2 = isp
 				.openFromFile("/home/abrar/Desktop/Varsity_project/Main/iXPAD/Source/src/iX/Widgets/iXTree.java");
 
-		diff_match_patch dmp = new diff_match_patch();
+		DiffMatch dmp = new DiffMatch();
 		int i = 0;
 		int j = 0;
 		int k = 0;
