@@ -62,24 +62,22 @@ public class iXTree extends JTree {
 
 	private HashMap<String, DefaultMutableTreeNode> treeStructureMap;
 
-	private static Comparator<String> compare = new Comparator<String>() {
-		public int compare(String obj1, String obj2) {
-			if (obj1 == null || obj2 == null)
-				return 0;
+//	private Comparator<String> compare = new Comparator<String>() {
+//		public int compare(String obj1, String obj2) {
+//			if (obj1 == null || obj2 == null)
+//				return 0;
+//
+//			return obj2.compareTo(obj1); // Sort in descending order
+//		}
+//	};
 
-			return obj2.compareTo(obj1); // Sort in descending order
-		}
-	};
-	
-//	public iXTree(String rootName, String className) {
-//		this(rootName, className, compare);
-//	}
+	private Comparator<String> compare = null;
 	
 	public iXTree(String rootName, String className) {
 		this.rootName = rootName;
 		this.className = className;
 
-		DefaultMutableTreeNode rootNode = node(rootName);
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootName);
 //this.setCellRenderer(new DefaultTreeCellRenderer() {
 //	
 //	@Override
@@ -121,10 +119,6 @@ public class iXTree extends JTree {
 		sortedMap.clear();
 	}
 	
-	public void setComparator(Comparator<String> comp) {
-		compare = comp;
-	}
-
 	private void readHashToTree(TreeMap<String, String> sortedMap, boolean convertToDate) {
 		for (String key : sortedMap.keySet()) {
 			String keyName = null;
@@ -163,23 +157,6 @@ public class iXTree extends JTree {
 		return hash;
 	}
 
-	private DefaultMutableTreeNode createNode(String nodeName, DefaultMutableTreeNode parentNode) {
-		DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(nodeName);
-		treeStructureMap.put(nodeName, childNode);
-
-		if (parentNode == null) {
-			return childNode;
-		}
-
-		parentNode.add(childNode);
-
-		return parentNode;
-	}
-
-	private DefaultMutableTreeNode getNode(String nodeName) {
-		return (DefaultMutableTreeNode) (treeStructureMap.get(nodeName));
-	}
-
 	private void addNodeTo(String childNodeName, String parentNodeName) {
 		DefaultMutableTreeNode parentNode = getNode(parentNodeName);
 		DefaultMutableTreeNode childNode;
@@ -197,6 +174,27 @@ public class iXTree extends JTree {
 				getNode(rootName).getChildCount());
 	}
 
+	private DefaultMutableTreeNode createNode(String nodeName, DefaultMutableTreeNode parentNode) {
+		DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(nodeName);
+		treeStructureMap.put(nodeName, childNode);
+
+		if (parentNode == null) {
+			return childNode;
+		}
+
+		parentNode.add(childNode);
+
+		return parentNode;
+	}
+
+	private DefaultMutableTreeNode getNode(String nodeName) {
+		return (DefaultMutableTreeNode) (treeStructureMap.get(nodeName));
+	}
+
+	public void setComparator(Comparator<String> comp) {
+		compare = comp;
+	}
+
 	public void expandNode(String nodeName) {
 		if (getNode(nodeName) == null) {
 			return;
@@ -209,14 +207,6 @@ public class iXTree extends JTree {
 		return rootName;
 	}
 
-	public DefaultMutableTreeNode node(String nodeText) {
-		return new DefaultMutableTreeNode(nodeText);
-	}
-	
-	public void setRoot(DefaultMutableTreeNode node) {
-		((DefaultTreeModel) this.getModel()).setRoot(node);
-	}
-	
 	public void clearAll() {
 		((DefaultTreeModel) this.getModel()).setRoot(new DefaultMutableTreeNode("No " + className));
 		treeStructureMap.clear();
