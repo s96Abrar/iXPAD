@@ -19,7 +19,9 @@
 
 package iX.Widgets;
 
+import java.awt.Component;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
@@ -27,8 +29,11 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
+import javax.swing.Icon;
 import javax.swing.JTree;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
@@ -53,37 +58,36 @@ public class iXTree extends JTree {
 	private HashMap<String, DefaultMutableTreeNode> treeStructureMap;
 
 	private Comparator<String> compare = null;
-	
+
 	public iXTree(String rootName, String className) {
 		this.rootName = rootName;
 		this.className = className;
 
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootName);
-//this.setCellRenderer(new DefaultTreeCellRenderer() {
-//	
-//	@Override
-//	public Component getTreeCellRendererComponent(JTree tree,
-//	    Object value, boolean selected, boolean expanded,
-//	    boolean leaf, int row, boolean hasFocus) {
-//	        super.getTreeCellRendererComponent(tree, value, selected,expanded, leaf, row, hasFocus);
-//	        DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
-//	        if (tree.getModel().getRoot().equals(nodo)) {
-////	            setIcon(root);
-//	        } else if (nodo.getChildCount() > 0) {
-////	            setIcon(parent);
-//	        } else {
-//	        	Icon leaf1 = FileSystemView.getFileSystemView().getSystemIcon( new File(nodo.toString()) );
-//	            setIcon(leaf1);
-//	        }
-//	        return this;
-//	}
-//});
+		this.setCellRenderer(new DefaultTreeCellRenderer() {
+
+			@Override
+			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
+					boolean leaf, int row, boolean hasFocus) {
+				super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+				DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
+				if (tree.getModel().getRoot().equals(nodo)) {
+//	            setIcon(root);
+				} else if (nodo.getChildCount() > 0) {
+//	            setIcon(parent);
+				} else {
+					Icon leaf1 = FileSystemView.getFileSystemView().getSystemIcon(new File(nodo.toString()));
+					setIcon(leaf1);
+				}
+				return this;
+			}
+		});
 		this.setModel(new DefaultTreeModel(rootNode));
-		
+
 		treeStructureMap = new HashMap<>();
 		treeStructureMap.put(rootName, rootNode);
 	}
-	
+
 	public void initializeTree(String fileName, boolean convertToDate) {
 		TreeMap<String, String> sortedMap = new TreeMap<>(compare);
 
@@ -99,7 +103,7 @@ public class iXTree extends JTree {
 
 		sortedMap.clear();
 	}
-	
+
 	private void readHashToTree(TreeMap<String, String> sortedMap, boolean convertToDate) {
 		for (String key : sortedMap.keySet()) {
 			String keyName = null;
@@ -108,7 +112,7 @@ public class iXTree extends JTree {
 			} else {
 				keyName = key;
 			}
-			
+
 			String value = sortedMap.get(key);
 
 			addNodeTo(value, keyName);
