@@ -26,6 +26,10 @@ import javax.swing.JOptionPane;
 
 import iX.Windows.iXPAD;
 
+/**
+ * @author abrar
+ *
+ */
 public class iXWindowListener implements WindowListener {
 
 	private iXPAD ixPAD;

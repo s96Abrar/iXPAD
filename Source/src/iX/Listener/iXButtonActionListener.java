@@ -26,6 +26,10 @@ import java.awt.event.ActionListener;
 import iX.TextEditor.iXEditor;
 import iX.Windows.iXPAD;
 
+/**
+ * @author abrar
+ *
+ */
 public class iXButtonActionListener implements ActionListener {
 
 	private iXPAD ixPAD;

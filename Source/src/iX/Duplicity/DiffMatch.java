@@ -83,7 +83,7 @@ public class DiffMatch {
 	/**
 	 * The number of bits in an int.
 	 */
-	private short Match_MaxBits = 32;
+	// private short Match_MaxBits = 32;
 
 	// Define some regex patterns for matching boundaries.
 	private Pattern BLANKLINEEND = Pattern.compile("\\n\\r?\\n\\Z", Pattern.DOTALL);

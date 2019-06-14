@@ -32,6 +32,10 @@ import javax.swing.JPanel;
 import iX.Utilities.iXVariables;
 import iX.Widgets.iXPinTree;
 
+/**
+ * @author abrar
+ *
+ */
 public class iXPin extends JDialog {
 	/**
 	 * 

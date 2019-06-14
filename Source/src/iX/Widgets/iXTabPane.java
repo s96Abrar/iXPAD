@@ -39,6 +39,10 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 import iX.TextEditor.iXEditorPanel;
 
+/**
+ * @author abrar
+ *
+ */
 public class iXTabPane extends JTabbedPane {
 
 	/**

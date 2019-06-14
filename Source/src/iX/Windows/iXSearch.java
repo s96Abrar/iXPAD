@@ -34,6 +34,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
+/**
+ * @author abrar
+ *
+ */
 public class iXSearch extends JDialog implements ActionListener {
 
 	/**

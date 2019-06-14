@@ -25,6 +25,10 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+/**
+ * @author abrar
+ *
+ */
 public class iXEditorPanel extends JPanel {
 
 	/**

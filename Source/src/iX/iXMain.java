@@ -27,6 +27,10 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import iX.Windows.iXPAD;
 import iX.Utilities.iXVariables;
 
+/**
+ * @author abrar
+ *
+ */
 public class iXMain {
 
 	public static void main(String[] args) {

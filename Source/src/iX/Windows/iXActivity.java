@@ -49,6 +49,10 @@ import iX.Utilities.iXUtility;
 import iX.Utilities.iXVariables;
 import iX.Widgets.iXTree;
 
+/**
+ * @author abrar
+ *
+ */
 public class iXActivity extends JDialog implements ListSelectionListener {
 	/**
 	 * 
