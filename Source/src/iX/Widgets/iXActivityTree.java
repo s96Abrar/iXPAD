@@ -19,9 +19,7 @@
 
 package iX.Widgets;
 
-import java.awt.Component;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
@@ -32,14 +30,10 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
-import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JTree;
-import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import iX.Utilities.iXUtility;
@@ -49,99 +43,94 @@ import iX.Utilities.iXVariables;
  * @author abrar
  *
  */
-public class iXTree extends JTree {
+public class iXActivityTree extends iXTree {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+//	// Sorting by descending order
+//	private Comparator<String> compare = new Comparator<String>() {
+//		public int compare(String obj1, String obj2) {
+//			Date o1 = null;
+//			Date o2 = null;
+//			try {
+//				o1 = new SimpleDateFormat(iXVariables.DATE_TIME_FORMAT).parse(obj1);
+//				o2 = new SimpleDateFormat(iXVariables.DATE_TIME_FORMAT).parse(obj2);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//			if (o1 == null || o2 == null)
+//				return 0;
+//
+//			return o2.compareTo(o1); // Sort in descending order
+//		}
+//	};
+//	
+//
+//	public iXActivityTree(String fileName, String rootName) {
+//		super(rootName, "Activity");
+//		
+//		setComparator(compare);
+//		
+//		initializeTree(fileName, true);
+//	}
 
 	private String rootName;
-	private String className;
 	private boolean isTreeEmpty;
 
 	private HashMap<String, DefaultMutableTreeNode> treeStructureMap;
 
-	private static Comparator<String> compare = new Comparator<String>() {
-		public int compare(String obj1, String obj2) {
-			if (obj1 == null || obj2 == null)
-				return 0;
-
-			return obj2.compareTo(obj1); // Sort in descending order
-		}
-	};
-	
-//	public iXTree(String rootName, String className) {
-//		this(rootName, className, compare);
-//	}
-	
-	public iXTree(String rootName, String className) {
+	public iXActivityTree(String fileName, String rootName) {
 		this.rootName = rootName;
-		this.className = className;
 
-		DefaultMutableTreeNode rootNode = node(rootName);
-//this.setCellRenderer(new DefaultTreeCellRenderer() {
-//	
-//	@Override
-//	public Component getTreeCellRendererComponent(JTree tree,
-//	    Object value, boolean selected, boolean expanded,
-//	    boolean leaf, int row, boolean hasFocus) {
-//	        super.getTreeCellRendererComponent(tree, value, selected,expanded, leaf, row, hasFocus);
-//	        DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
-//	        if (tree.getModel().getRoot().equals(nodo)) {
-////	            setIcon(root);
-//	        } else if (nodo.getChildCount() > 0) {
-////	            setIcon(parent);
-//	        } else {
-//	        	Icon leaf1 = FileSystemView.getFileSystemView().getSystemIcon( new File(nodo.toString()) );
-//	            setIcon(leaf1);
-//	        }
-//	        return this;
-//	}
-//});
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootName);
+
 		this.setModel(new DefaultTreeModel(rootNode));
-		
-		treeStructureMap = new HashMap<>();
-		treeStructureMap.put(rootName, rootNode);
-	}
-	
-	public void initializeTree(String fileName, boolean convertToDate) {
-		TreeMap<String, String> sortedMap = new TreeMap<>(compare);
+
+		// Sorting on date time by descending order
+		Comparator<Date> dateSort = new Comparator<Date>() {
+			public int compare(Date obj1, Date obj2) {
+				if (obj1 == null || obj2 == null)
+					return 0;
+
+				return obj2.compareTo(obj1); // Sort in descending order
+			}
+		};
+
+		TreeMap<Date, String> sortedMap = new TreeMap<>(dateSort);
 
 		sortedMap.putAll(readFileToHash(fileName));
 
+		treeStructureMap = new HashMap<>();
+		treeStructureMap.put(rootName, rootNode);
+
 		if (sortedMap.isEmpty()) {
 			isTreeEmpty = true;
-			clearAll();
+			rootNode.setUserObject("No Activity");
 		} else {
 			isTreeEmpty = false;
-			readHashToTree(sortedMap, convertToDate);
+			readHashToTree(sortedMap);
 		}
 
 		sortedMap.clear();
 	}
-	
-	public void setComparator(Comparator<String> comp) {
-		compare = comp;
-	}
 
-	private void readHashToTree(TreeMap<String, String> sortedMap, boolean convertToDate) {
-		for (String key : sortedMap.keySet()) {
-			String keyName = null;
-			if (convertToDate == true) {
-				keyName = iXUtility.convertToDateText(key, iXVariables.DATE_FORMAT);
-			} else {
-				keyName = key;
-			}
-			
+	private void readHashToTree(TreeMap<Date, String> sortedMap) {
+		for (Date key : sortedMap.keySet()) {
+			String keyName = iXUtility.convertToDateText(key, iXVariables.DATE_FORMAT);// (new
+																						// SimpleDateFormat(DATE_FORMAT).format(key)).toString();
 			String value = sortedMap.get(key);
 
 			addNodeTo(value, keyName);
 		}
 	}
 
-	private Hashtable<String, String> readFileToHash(String fileName) {
-		Hashtable<String, String> hash = new Hashtable<>();
+	private Hashtable<Date, String> readFileToHash(String fileName) {
+		Hashtable<Date, String> hash = new Hashtable<>();
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(fileName));
@@ -149,9 +138,13 @@ public class iXTree extends JTree {
 			while ((currentLine = br.readLine()) != null) {
 				String[] tList = currentLine.split(iXVariables.VALUE_SEPERATOR);
 				if (tList.length > 1) {
-					String key = tList[0];
-					String value = tList[1];
-					hash.put(key, value);
+					try {
+						Date key = new SimpleDateFormat(iXVariables.DATE_TIME_FORMAT).parse(tList[0]);
+						String value = tList[1];
+						hash.put(key, value);
+					} catch (ParseException e) {
+						System.out.println("iXPAD : Date time parsing problem.\n" + e.getMessage());
+					}
 				}
 			}
 		} catch (IOException e) {
@@ -209,20 +202,26 @@ public class iXTree extends JTree {
 		return rootName;
 	}
 
-	public DefaultMutableTreeNode node(String nodeText) {
-		return new DefaultMutableTreeNode(nodeText);
-	}
-	
-	public void setRoot(DefaultMutableTreeNode node) {
-		((DefaultTreeModel) this.getModel()).setRoot(node);
-	}
-	
 	public void clearAll() {
-		((DefaultTreeModel) this.getModel()).setRoot(new DefaultMutableTreeNode("No " + className));
+		((DefaultTreeModel) this.getModel()).setRoot(new DefaultMutableTreeNode("No Activity"));
 		treeStructureMap.clear();
 	}
 
 	public boolean isEmpty() {
 		return isTreeEmpty;
+	}
+
+	public static void main(String[] args) {
+		JFrame jf = new JFrame();
+//		iXTree tree = new iXTree(System.getProperty("user.home") + "/iXPADActivity.txt", "Activity");
+//		tree.setShowsRootHandles(false);
+//		tree.expandNode(tree.getRootName());
+
+		// show
+//		jf.getContentPane().add(tree);
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jf.setBounds(0, 0, 500, 500);
+
+		jf.setVisible(true);
 	}
 }

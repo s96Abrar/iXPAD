@@ -47,6 +47,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import iX.Utilities.iXUtility;
 import iX.Utilities.iXVariables;
+import iX.Widgets.iXActivityTree;
 import iX.Widgets.iXTree;
 
 /**
@@ -62,7 +63,7 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 	private Component parent;
 	private JPanel buttonPanel;
 	private JButton btnClearActivity;
-	private iXTree treeActivity;
+	private iXActivityTree treeActivity;
 
 	iXUtility ixUtil;
 	Container frameContainer;
@@ -95,7 +96,7 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 			clearActivity();
 		});
 		buttonPanel = new JPanel();
-		treeActivity = new iXTree(iXVariables.iXPADActivityFile, "Activity");
+		treeActivity = new iXActivityTree(iXVariables.iXPADActivityFile, "Activity");
 		treeActivity.expandNode(treeActivity.getRootName());
 
 		JScrollPane treeScroll = new JScrollPane();
@@ -235,12 +236,7 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 //		f.openFile(recentList.getSelectedValue());
 	}
 
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		} catch (Exception e) {
-
-		}
+	public static void main(String[] args) {		
 		iXActivity test = new iXActivity(null);
 		test.setVisible(true);
 	}

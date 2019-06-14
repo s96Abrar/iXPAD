@@ -25,6 +25,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -140,6 +141,18 @@ public class iXUtility {
 		return false;
 	}
 
+	public static String convertToDateText(String date, String format) {
+		Date d = null;
+		try {
+			d = new SimpleDateFormat(iXVariables.DATE_TIME_FORMAT).parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return convertToDateText(d, format);
+	}
+	
 	public static String convertToDateText(Date date, String format) {
 		String given = (new SimpleDateFormat(format).format(date)).toString();
 
