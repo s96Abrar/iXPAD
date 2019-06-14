@@ -62,6 +62,11 @@ public class DiffIt extends JDialog {
 		int i = 0;
 		int j = 0;
 		int k = 0;
+		
+		Color color = null;
+//		StyledDocument styledDoc = editor.getStyledDocument();
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+
 		for (Diff d : dmp.diff_main(text1, text2)) {
 //			System.out.println(d.operation + d.text);
 			if (d.operation == Operation.EQUAL) {
@@ -78,6 +83,8 @@ public class DiffIt extends JDialog {
 //				highlight(editor, d.text, new MyHighlightPainter(Color.RED));
 //				doHighlight(editor, d.operation, i, d.text.length());
 				i += d.text.length();
+				
+				color = editor.getBackground();
 			} else if (d.operation == Operation.INSERT) {
 
 //				System.out.println("Insert " + i + " " + (i+d.text.length()));
@@ -94,6 +101,8 @@ public class DiffIt extends JDialog {
 //				highlight(editor, d.text, new MyHighlightPainter(Color.GREEN));
 //				doHighlight(editor, d.operation, i, d.text.length());
 				j += d.text.length();
+				
+				color = Color.GREEN;
 			} else if (d.operation == Operation.DELETE) {
 //
 //
@@ -111,11 +120,21 @@ public class DiffIt extends JDialog {
 //				highlight(editor, d.text, new MyHighlightPainter(Color.RED));
 //				doHighlight(editor, d.operation, i, d.text.length());
 				k += d.text.length();
+				
+				color = Color.RED;
 			} else {
-				System.out.println(d.operation + d.text);
+//				System.out.println(d.operation + d.text);
 			}
 
-			editor.setText(editor.getText() + "<" + d.operation + ">" + d.text + "</" + d.operation + ">");
+			AttributeSet attr = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Background, color);
+			try {
+				editor.getDocument().insertString(editor.getText().length(), d.text, attr);
+			} catch (BadLocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+//			editor.setText(editor.getText() + "<" + d.operation + ">" + d.text + "</" + d.operation + ">");
 		}
 
 		lbl.setText("Count of document modifications(old, new) :\nCharacter deleted : " + k + "\nCharacter inserted : "
@@ -173,19 +192,17 @@ public class DiffIt extends JDialog {
 			asetF = sc.addAttribute(aset3, StyleConstants.Bold, false);
 			break;
 		}
-		if (asetF2 != null)
-			styledDoc.setCharacterAttributes(offset, length, asetF2, true);
-		else if (asetF != null)
+		if (asetF != null)
 			styledDoc.setCharacterAttributes(offset, length, asetF, true);
 		else
 			styledDoc.setCharacterAttributes(offset, length, aset, true);
 
-		try {
-			System.out.println(offset + " " + length + " " + op + " " + t.getText(offset, length));
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println(offset + " " + length + " " + op + " " + t.getText(offset, length));
+//		} catch (BadLocationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 //	    styledDoc.setCharacterAttributes(offset, length, asetF, false);
 
