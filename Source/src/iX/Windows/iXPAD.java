@@ -231,11 +231,6 @@ public class iXPAD extends JFrame {
 		}
 	}
 
-	public void paintComponents(Graphics g) {
-		super.paintComponents(g);
-		g.drawImage((ixUtil.getImageResource("btnAbout.png")).getImage(), 0, 0, this);
-	}
-
 	public void showPinView() {
 		iXPin ixPin = new iXPin(this);
 		ixPin.setVisible(true);
@@ -244,11 +239,9 @@ public class iXPAD extends JFrame {
 	public void showActivity() {
 		iXActivity activity = new iXActivity(this);
 		activity.setVisible(true);
-		;
 	}
 
 	public void pinIt() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -262,11 +255,10 @@ public class iXPAD extends JFrame {
 
 	public iXEditor getiXEditor() {
 		if (ixTabPane.getEditorPanel() == null) {
-			System.out.println("Null editor");
+			System.out.println("iXPAD : Warning : Null editor");
 			return null;
 		}
 
-		System.out.println("Editor found");
 		return ixTabPane.getEditorPanel().getiXTextEditor();
 	}
 
@@ -274,7 +266,6 @@ public class iXPAD extends JFrame {
 		int key = 0;
 		int modifier = ActionEvent.CTRL_MASK;
 
-		// TODO Store all buttons to hash map as string, jbutton
 		if (buttonText == "Open") {
 			key = KeyEvent.VK_O;
 		} else if (buttonText == "New Page") {
@@ -318,7 +309,6 @@ public class iXPAD extends JFrame {
 	}
 
 	public void updateUndoRedo(boolean canUndo, boolean canRedo) {
-		System.out.println("From " + canUndo + " " + canRedo);
 		btnUndo.setEnabled(canUndo);
 		btnRedo.setEnabled(canRedo);
 	}

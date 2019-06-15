@@ -56,7 +56,6 @@ public class iXTree extends JTree {
 	private boolean isTreeEmpty;
 
 	private HashMap<String, DefaultMutableTreeNode> treeStructureMap;
-
 	private Comparator<String> compare = null;
 
 	public iXTree(String rootName, String className) {
@@ -65,16 +64,19 @@ public class iXTree extends JTree {
 
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootName);
 		this.setCellRenderer(new DefaultTreeCellRenderer() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
-			@Override
 			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
 					boolean leaf, int row, boolean hasFocus) {
 				super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 				DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
 				if (tree.getModel().getRoot().equals(nodo)) {
-//	            setIcon(root);
+					// No need to set any icon
 				} else if (nodo.getChildCount() > 0) {
-//	            setIcon(parent);
+					// No need to set any icon
 				} else {
 					Icon leaf1 = FileSystemView.getFileSystemView().getSystemIcon(new File(nodo.toString()));
 					setIcon(leaf1);
@@ -82,6 +84,7 @@ public class iXTree extends JTree {
 				return this;
 			}
 		});
+		
 		this.setModel(new DefaultTreeModel(rootNode));
 
 		treeStructureMap = new HashMap<>();
@@ -146,7 +149,6 @@ public class iXTree extends JTree {
 		DefaultMutableTreeNode parentNode = getNode(parentNodeName);
 		DefaultMutableTreeNode childNode;
 
-		System.out.println(parentNode + " " + parentNodeName);
 		if (parentNode == null) {
 			parentNode = createNode(parentNodeName, null);
 		} else {

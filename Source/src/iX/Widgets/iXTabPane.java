@@ -95,7 +95,7 @@ public class iXTabPane extends JTabbedPane {
 				private static final long serialVersionUID = 1L;
 
 				public String getText() {
-					int i = ixTabPane.getSelectedIndex();// indexOfComponent(iXTabButtonComponent.this);
+					int i = ixTabPane.getSelectedIndex();
 					if (i != -1) {
 						return ixTabPane.getTitleAt(i);
 					}
@@ -138,7 +138,7 @@ public class iXTabPane extends JTabbedPane {
 				addActionListener(
 						// iXTabCloseButtonActionListener
 						(e) -> {
-							int i = ixTabPane.getSelectedIndex();// indexOfComponent(iXTabButtonComponent.this);
+							int i = ixTabPane.getSelectedIndex();
 							if (i != -1) {
 								ixTabPane.remove(i);
 							}

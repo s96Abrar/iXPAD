@@ -48,15 +48,6 @@ public class iXPinIt extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 
-//	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
-//	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
-
-	public iXPinIt(String filePath, Component parent) {
-
-		this.filePath = filePath;
-		setupUI(parent);
-	}
-
 	private JCheckBox chkOldSection;
 	private JComboBox<String> sectionList;
 	private JCheckBox chkNewSection;
@@ -64,6 +55,11 @@ public class iXPinIt extends JDialog {
 	private JLabel lblFileName;
 	private JButton btnOK;
 	private String filePath;
+
+	public iXPinIt(String filePath, Component parent) {
+		this.filePath = filePath;
+		setupUI(parent);
+	}
 
 	private void setupUI(Component parent) {
 		// Set frame properties
@@ -92,14 +88,10 @@ public class iXPinIt extends JDialog {
 		}
 		System.out.println("Sr " + list.toString());
 
-//		jk = (String[]) list.toArray();
-//		if (jk != null) {
-//			DefaultComboBoxModel<String> d = new DefaultComboBoxModel<>(jk);
-//			sectionList.setModel(d);
-//		}
 		for (String s : list) {
 			sectionList.addItem(s);
 		}
+
 		chkNewSection = new JCheckBox("Add to new section ");
 		tfNewSection = new JTextField();
 		lblFileName = new JLabel(filePath);

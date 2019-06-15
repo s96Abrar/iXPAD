@@ -77,8 +77,6 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 		this.parent = parent;
 		setModal(true);
 		setupUI();
-
-//		loadActivity();
 	}
 
 	private void setupUI() {
@@ -116,105 +114,6 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 		this.add(treeScroll, BorderLayout.CENTER);
 	}
 
-	private void loadActivity() {
-
-		Hashtable<Date, String> act = new Hashtable<>();
-		TreeMap<Date, String> sorted = new TreeMap<>( // Sorting on date time by descending order
-				new Comparator<Date>() {
-					public int compare(Date obj1, Date obj2) {
-						if (obj1 == null || obj2 == null)
-							return 0;
-
-						return obj2.compareTo(obj1);// Sort in descending order
-					}
-				});
-
-		BufferedReader bbr;
-		try {
-			bbr = new BufferedReader(new FileReader(iXVariables.iXPADActivityFile));
-			String currentLine = null;
-			while ((currentLine = bbr.readLine()) != null) {
-				String[] tList = currentLine.split("\t\t\t");
-				if (tList.length > 1) {
-					try {
-						Date key = new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").parse(tList[0]);
-						String value = (tList[1]);
-						act.put(key, value);
-					} catch (Exception e) {
-
-					}
-				}
-			}
-		} catch (Exception e) {
-
-		}
-
-//		ArrayList<Date> dateTime = new ArrayList<Date>();
-//		ArrayList<String> fileName = new ArrayList<String>();
-//		
-//		BufferedReader br;
-//		try {
-//			br = new BufferedReader(new FileReader(activityFile));
-//			String currentLine = "";
-//			while ((currentLine = br.readLine()) != null) {
-//				String[] tList = currentLine.split("\t\t\t");
-//				if (tList.length > 1) {
-//					//System.out.println(new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").parse(tList[0]));
-//					//System.out.println(tList[1]);
-//					try {
-//						dateTime.add( new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").parse(tList[0]) );
-//						fileName.add(tList[1]);
-//					} catch (Exception ex){
-//						System.out.println(tList[0]);
-//					}					
-//				}
-//			}		
-//			br.close();
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//		ArrayList<Date> tdt = new ArrayList<Date>( dateTime );
-//		
-//		// Sorting on date time by descending order
-//		Collections.sort(datetime, new Comparator<Date>() {
-//
-//			@Override
-//			public int compare(Date obj1, Date obj2) {
-//				if (obj1 == null || obj2 == null)
-//			        return 0;
-//				
-//			    return obj2.compareTo(obj1);
-//			}
-//		});
-//		
-//		ArrayList<String> list = new ArrayList<String>();
-//		for (Date d : dateTime) {
-//			int index = tdt.indexOf(d);
-//			 list.add(fileName.get(index));
-//		}
-//		
-//		String[] ts = new String[list.size()];
-//		ts = list.toArray(ts);
-
-		sorted.putAll(act);
-		act.putAll(sorted);
-
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
-		for (Date key : act.keySet()) {
-			String[] dateTime = (new SimpleDateFormat("HH.mm.ss.SSS dd.MM.yyyy").format(key)).toString().split(" ");
-			DefaultMutableTreeNode date = new DefaultMutableTreeNode(dateTime[1]);
-			DefaultMutableTreeNode time = new DefaultMutableTreeNode(dateTime[0]);
-			date.add(time);
-			root.add(date);
-
-		}
-//		treeActivity.getModel().;
-		sorted.clear();
-//		treeActivity = new JTree(act);
-	}
-
 	public void saveActivity(String lastFilePath) {
 		String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH.mm.ss.SSS dd.MM.yyyy")) + "\t\t\t"
 				+ lastFilePath;
@@ -229,7 +128,6 @@ public class iXActivity extends JDialog implements ListSelectionListener {
 		}
 	}
 
-	@Override
 	public void valueChanged(ListSelectionEvent e) {
 //		MainFrame f = new MainFrame();
 //		f.setVisible(true);

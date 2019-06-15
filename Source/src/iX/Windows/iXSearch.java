@@ -29,7 +29,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -45,9 +44,6 @@ public class iXSearch extends JDialog implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	int startIndex = 0;
-	int select_start = -1;
-	
 	private JLabel lblFind;
 	private JLabel lblReplace;
 	private JTextField txtFind;
@@ -61,8 +57,7 @@ public class iXSearch extends JDialog implements ActionListener {
 	
 	private JTextPane editor;
 
-	public iXSearch(JTextPane textEditor) {
-		
+	public iXSearch(JTextPane textEditor) {		
 		this.editor = textEditor;
 		
 		setupUI();
@@ -204,9 +199,4 @@ public class iXSearch extends JDialog implements ActionListener {
 		}
 	}
 	
-	public static void main(String[] args) {
-		iXSearch s = new iXSearch(new JTextPane());
-		s.setVisible(true);
-	}
-
 }

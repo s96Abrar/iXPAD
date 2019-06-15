@@ -41,9 +41,7 @@ public class iXPin extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-//	public static final String pinFile = System.getProperty("user.home") + "/iXPADPin.txt";
-//	public static final String pinSectionFile = System.getProperty("user.home") + "/iXPADPinSection.txt";
-
+	
 	private Component parent;
 	private JPanel buttonPanel;
 	private JButton btnClearActivity;
