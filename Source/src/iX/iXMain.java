@@ -21,10 +21,13 @@ package iX;
 
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import iX.Windows.iXPAD;
+import iX.Utilities.iXDarkTheme;
 import iX.Utilities.iXVariables;
 
 /**
@@ -48,33 +51,36 @@ public class iXMain {
 			System.out.println("iXPAD : Info : Available installed theme " + list);
 
 			// TODO Move to settings
-			boolean custom = false;
+			boolean custom = true;
 			boolean customLight = false;
-
-			if (osName.equals("Linux")) {
-				if (list.contains(iXVariables.linuxGTKTheme)) {
-					// Freezes UI when system changes the theme.
-					UIManager.setLookAndFeel(iXVariables.linuxGTKTheme);
-//					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} else {
-					custom = true;
-				}
-			} else {
-				if (list.contains(iXVariables.windowsTheme)) {
-					UIManager.setLookAndFeel(iXVariables.windowsTheme);
-				} else {
-					custom = true;
-				}
-			}
 
 			if (custom == true) {
 				if (customLight == true) {
 					UIManager.setLookAndFeel(iXVariables.lightThemeNimbus);
 				} else {
-					// TODO
-					// Set the black theme
-					// Create a custom class
-
+					MetalLookAndFeel.setCurrentTheme(new iXDarkTheme().darkTheme);
+					
+			        try {
+			            UIManager.setLookAndFeel(new MetalLookAndFeel());
+			        } catch (Exception ev) {
+			        	
+			        }
+				}
+			} else {
+				if (osName.equals("Linux")) {
+					if (list.contains(iXVariables.linuxGTKTheme)) {
+						// Freezes UI when system changes the theme.
+						UIManager.setLookAndFeel(iXVariables.linuxGTKTheme);
+//						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					} else {
+						custom = true;
+					}
+				} else {
+					if (list.contains(iXVariables.windowsTheme)) {
+						UIManager.setLookAndFeel(iXVariables.windowsTheme);
+					} else {
+						custom = true;
+					}
 				}
 			}
 
@@ -83,6 +89,7 @@ public class iXMain {
 		}
 
 		iXPAD ixpad = new iXPAD();
+		JFrame.setDefaultLookAndFeelDecorated(true);
 		ixpad.setVisible(true);
 	}
 

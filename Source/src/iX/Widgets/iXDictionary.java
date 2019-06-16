@@ -47,14 +47,14 @@ public class iXDictionary extends JDialog {
 	private String dictFile = "/dict/dictfile.txt";
 	Hashtable<String, String> di;
 
-	public iXDictionary(String word) {
+	public iXDictionary(String getWord) {
 		// Set frame properties
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setMinimumSize(new Dimension(400, 300));
 		this.setTitle("iXPAD - Dictionary");
 		this.setLocationRelativeTo(null); // Place the frame to the center of the parent.
 		// ====================
-		this.word = word;
+		this.word = getWord;
 
 		di = loadDict();
 
